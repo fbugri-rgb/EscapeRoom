@@ -1,0 +1,76 @@
+package kdg.model;
+
+import java.util.List;
+
+/**
+ * @author Borja
+ * @version 1.0 28/03/2026 15:03
+ *
+ */
+public class Game {
+    // Attributen
+    private Player player;
+    private List<Room> rooms;
+    private Room currentRoom;
+
+    // Constructor
+    public Game(Player player, List<Room> rooms, Room currentRoom) {
+        this.player = player;
+        this.rooms = rooms;
+        this.currentRoom = currentRoom;
+    }
+
+    public Game(){};
+
+    // Methodes voor het spel te delegeren
+    public void start(){}
+    public void pause(){}
+    public void resume(){}
+    public void stop(){}
+    public void win(){}
+    public void lose(){}
+
+    // Deur die de kamers verbindt gebruiken -> volgende room
+    public void moveThroughDoor(Door door){
+        this.currentRoom = door.getTargetRoom();
+    }
+
+    // Item van de room oppakken
+    public boolean pickupItem(Item item){
+        // check
+        if(item == null) return false;
+        // check of speler al item heeft
+        if(player.hasItem(item)) return false;
+
+        // Item uit room halen en inventory steken van speler
+        if(currentRoom.getItems().contains(item)){
+            player.pickUpItem(item);
+            currentRoom.removeItem(item);
+            return true;
+        }
+        return false;
+    }
+
+    // Item op een deur gebruiken
+    public boolean useItemOnDoor(Item item, Door door){
+        // Check input geldig
+        if(item == null || door == null) return false;
+        // Check of player item heeft
+        if(!player.hasItem(item)) return false;
+        // proberen deur te openen en returnen of het gelukt is
+        return door.unlock(item.getId());
+    }
+
+    // Getters voor attributen klasse
+    Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    Player getPlayer() {
+        return player;
+    }
+
+    List<Room> getRooms() {
+        return rooms;
+    }
+}

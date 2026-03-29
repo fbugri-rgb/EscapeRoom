@@ -1,0 +1,29 @@
+package kdg.model;
+
+/**
+ * @author Borja
+ * @version 1.0 04/02/2026 20:29
+ *
+ */
+public class Item {
+    private final String id;
+    private final String name;
+    private final String description;
+
+    public Item(String id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    // Getter voor item
+    String getId() {
+        return id;
+    }
+    String getName() {
+        return name;
+    }
+    String getDescription() {
+        return description;
+    }
+}
