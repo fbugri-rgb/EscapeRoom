@@ -31,8 +31,11 @@ public class Game {
     public void lose(){}
 
     // Deur die de kamers verbindt gebruiken -> volgende room
-    public void moveThroughDoor(Door door){
+    public boolean moveThroughDoor(Door door){
+        if (door == null) return false;
+        if (door.isLocked()) return false;
         this.currentRoom = door.getTargetRoom();
+        return true;
     }
 
     // Item van de room oppakken

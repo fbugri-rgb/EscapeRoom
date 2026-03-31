@@ -21,7 +21,7 @@ public class Door {
     }
 
     // Is deur locked of niet
-    public boolean Locked() {
+    public boolean isLocked() {
         return locked;
     }
 
