@@ -17,6 +17,10 @@ public class Room {
 
     // Constructor
     public Room(String name, String description) {
+        // Check
+        if (name == null) {
+            throw new IllegalArgumentException("name mag niet null zijn");
+        }
         this.name = name;
         this.description = description;
         // initialiseren van lijsten voor geen nullPointerException te krijgen.

@@ -12,6 +12,11 @@ public class Player {
 
     // Constructor
     public Player(String name) {
+        // Check
+        if (name == null) {
+            throw new IllegalArgumentException("name mag niet null zijn");
+        }
+
         this.name = name;
         this.inventory = new Inventory();
     }

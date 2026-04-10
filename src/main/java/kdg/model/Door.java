@@ -14,6 +14,14 @@ public class Door {
 
     // Constructor
     public Door(Room fromRoom, Room toRoom, boolean isLocked, String requiredItemId) {
+        // Check
+        if (fromRoom == null) {
+            throw new IllegalArgumentException("fromRoom mag niet null zijn");
+        }
+        if (toRoom == null) {
+            throw new IllegalArgumentException("toRoom mag niet null zijn");
+        }
+
         this.fromRoom = fromRoom;
         this.toRoom = toRoom;
         this.locked = isLocked;

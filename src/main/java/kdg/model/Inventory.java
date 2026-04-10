@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Inventory {
     // Attributen klasse
-    private List<Item> items;
+    private final List<Item> items;
 
     // Constructor - initialiseren van Items lijst
     public Inventory() {
@@ -29,7 +29,7 @@ public class Inventory {
 
     // Item uit lijst verwijderen -> technische actie
     public boolean removeItem(Item item) {
-        return  this.items.remove(item);
+        return this.items.remove(item);
     }
 
     // Item verwijderen uit lijst met ItemId

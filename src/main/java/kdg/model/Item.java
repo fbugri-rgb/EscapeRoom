@@ -11,6 +11,14 @@ public class Item {
     private final String description;
 
     public Item(String id, String name, String description) {
+        // Check
+        if (id == null) {
+            throw new IllegalArgumentException("id mag niet null zijn");
+        }
+        if (name == null) {
+            throw new IllegalArgumentException("name mag niet null zijn");
+        }
+
         this.id = id;
         this.name = name;
         this.description = description;

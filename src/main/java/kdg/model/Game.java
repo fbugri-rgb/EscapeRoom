@@ -15,6 +15,20 @@ public class Game {
 
     // Constructor
     public Game(Player player, List<Room> rooms, Room currentRoom) {
+        // Checks
+        if (player == null) {
+            throw new IllegalArgumentException("player mag niet null zijn");
+        }
+        if (rooms == null) {
+            throw new IllegalArgumentException("rooms mag niet null zijn");
+        }
+        if (currentRoom == null) {
+            throw new IllegalArgumentException("currentRoom mag niet null zijn");
+        }
+        if (!rooms.contains(currentRoom)) {
+            throw new IllegalArgumentException("currentRoom moet in rooms zitten");
+        }
+
         this.player = player;
         this.rooms = rooms;
         this.currentRoom = currentRoom;
@@ -34,7 +48,9 @@ public class Game {
     public boolean moveThroughDoor(Door door){
         if (door == null) return false;
         if (door.isLocked()) return false;
-        this.currentRoom = door.getTargetRoom();
+        if (currentRoom.getExits().contains(door)) {
+            this.currentRoom = door.getTargetRoom();
+        }
         return true;
     }
 
