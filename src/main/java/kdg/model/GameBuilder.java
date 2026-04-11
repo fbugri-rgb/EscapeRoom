@@ -19,7 +19,7 @@ public class GameBuilder {
         Item schroevendraaier = new Item("Schroevendraaier_01", "schroevendraaier", "Schroevendraaier om iets mee vast te zetten.");
 
         // ------ Rooms ------
-        Room beginKamer = new Room("BeginKamer_01", "Beginkamer ");
+        Room beginKamer = new Room("BeginKamer", "Beginkamer ");
         Room gang = new Room("Gang", "Een lange industriële gang. Meerdere deuren, de meeste afgesloten.");
         Room opslagruimte = new Room("Opslagruimte", "Volle rekken met materiaal. Ergens moet hier iets nuttigs zijn.");
         Room labo = new Room("Labo", "Computerschermen flikkeren. Een terminal vraagt een wachtwoord.");
@@ -48,6 +48,7 @@ public class GameBuilder {
 
         gang.addExit(gangNaarOpslag);
         gang.addExit(gangNaarLabo);
+        gang.addExit(startNaarGang);
 
         opslagruimte.addExit(gangNaarOpslag);
 

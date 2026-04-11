@@ -1,5 +1,7 @@
 package kdg.model;
 
+import java.util.Objects;
+
 /**
  * @author Borja
  * @version 1.0 28/03/2026 14:36
@@ -52,4 +54,18 @@ public class Door {
         throw new IllegalArgumentException("CurrentRoom hoort niet bij deze deur");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Door door = (Door) o;
+        // check beide richtingen - bidirectionele deur
+        return (Objects.equals(fromRoom, door.fromRoom) && Objects.equals(toRoom, door.toRoom))
+                || (Objects.equals(fromRoom, door.toRoom) && Objects.equals(toRoom, door.fromRoom));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fromRoom, toRoom);
+    }
 }
