@@ -13,7 +13,7 @@ public class Door {
     private String requiredItemId;
 
     // Constructor
-    public Door(Room fromRoom, Room toRoom, boolean isLocked, String requiredItemId) {
+    public Door(Room fromRoom, Room toRoom, boolean locked, String requiredItemId) {
         // Check
         if (fromRoom == null) {
             throw new IllegalArgumentException("fromRoom mag niet null zijn");
@@ -24,7 +24,7 @@ public class Door {
 
         this.fromRoom = fromRoom;
         this.toRoom = toRoom;
-        this.locked = isLocked;
+        this.locked = locked;
         this.requiredItemId = requiredItemId;
     }
 
@@ -45,8 +45,11 @@ public class Door {
     }
 
     // volgende room opvragen
-    Room getTargetRoom() {
-        return toRoom;
+    Room getTargetRoom(Room currentRoom) {
+        // bidirectioneel -
+        if (currentRoom.equals(fromRoom)) return toRoom;
+        if (currentRoom.equals(toRoom)) return fromRoom;
+        throw new IllegalArgumentException("CurrentRoom hoort niet bij deze deur");
     }
 
 }
