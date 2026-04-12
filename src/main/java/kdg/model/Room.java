@@ -2,6 +2,7 @@ package kdg.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Borja
@@ -65,5 +66,25 @@ public class Room {
 
     public String getDescription() {
         return description;
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return Objects.equals(getName(), room.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getName());
+    }
+
+    @Override
+    public String toString() {
+        return "room: " + getName();
     }
 }

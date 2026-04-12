@@ -34,7 +34,7 @@ public class Game {
         this.currentRoom = currentRoom;
     }
 
-    public Game(){};
+    public Game(){}
 
     // Methodes voor het spel te delegeren
     public void start(){}
@@ -49,9 +49,10 @@ public class Game {
         if (door == null) return false;
         if (door.isLocked()) return false;
         if (currentRoom.getExits().contains(door)) {
-            this.currentRoom = door.getTargetRoom();
+            this.currentRoom = door.getTargetRoom(currentRoom);
+            return true;
         }
-        return true;
+        return false;
     }
 
     // Item van de room oppakken

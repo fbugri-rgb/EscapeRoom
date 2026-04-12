@@ -19,6 +19,7 @@ public class Inventory {
 
     // Item aan inventory toevoegen - technische actie
     public void addItem(Item item) {
+        if (item == null) throw new IllegalArgumentException("item mag niet null zijn");
         this.items.add(item);
     }
 
