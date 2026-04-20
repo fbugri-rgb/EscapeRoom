@@ -23,6 +23,7 @@ public class SpelschermView extends BorderPane {
 
     // CENTER
     private ListView<String> uitgangenLijst;
+    private Button gaDoorDeurKnop;
     private ListView<String> kamerItemsLijst;
     private Button oppakkenKnop;
 
@@ -69,7 +70,8 @@ public class SpelschermView extends BorderPane {
                 """);
 
         // CENTER
-        uitgangenLijst   = maakLijst(180, 120);
+        uitgangenLijst   = maakLijst(180, 100);
+        gaDoorDeurKnop   = maakKnop("Ga door deur");
         kamerItemsLijst  = maakLijst(180, 120);
         oppakkenKnop     = maakKnop("Oppakken");
 
@@ -100,7 +102,7 @@ public class SpelschermView extends BorderPane {
         // CENTER
         Label uitgangenLabel = maakSectieLabel("Uitgangen:");
         Label kamerItemsLabel = maakSectieLabel("Items in kamer:");
-        VBox centrum = new VBox(10, uitgangenLabel, uitgangenLijst, kamerItemsLabel, kamerItemsLijst, oppakkenKnop);
+        VBox centrum = new VBox(10, uitgangenLabel, uitgangenLijst, gaDoorDeurKnop, kamerItemsLabel, kamerItemsLijst, oppakkenKnop);
         centrum.setPadding(new Insets(16));
         centrum.setAlignment(Pos.TOP_CENTER);
         centrum.setStyle("-fx-background-color: #1a1a1a;");
@@ -163,6 +165,7 @@ public class SpelschermView extends BorderPane {
     TextArea getKamerBeschrijvingArea() { return kamerBeschrijvingArea; }
     ListView<String> getUitgangenLijst()  { return uitgangenLijst; }
     ListView<String> getKamerItemsLijst() { return kamerItemsLijst; }
+    Button getGaDoorDeurKnop()      { return gaDoorDeurKnop; }
     Button getOppakkenKnop()        { return oppakkenKnop; }
     ListView<String> getInventoryLijst()  { return inventoryLijst; }
     Label getTimerLabel()           { return timerLabel; }

@@ -7,6 +7,7 @@ import kdg.model.GameBuilder;
 import kdg.model.Timer;
 import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
+import kdg.model.HighscoreManager;
 import kdg.view.aboutscherm.AboutschermPresenter;
 import kdg.view.aboutscherm.AboutschermView;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
@@ -43,11 +44,12 @@ public class StartschermPresenter {
                 return;
             }
 
-            Game nieuwSpel = GameBuilder.buildGame();
+            Game nieuwSpel = GameBuilder.buildGame(naam);
             Timer timer = new Timer(SPELTIJD_SECONDEN);
+            HighscoreManager hsManager = new HighscoreManager();
 
             SpelschermView spelView = new SpelschermView();
-            new SpelschermPresenter(nieuwSpel, timer, spelView);
+            new SpelschermPresenter(nieuwSpel, timer, hsManager, spelView);
 
             Stage stage = (Stage) view.getScene().getWindow();
             stage.setScene(new Scene(spelView, 1000, 650));

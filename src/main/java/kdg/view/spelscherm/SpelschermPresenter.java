@@ -4,14 +4,18 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import kdg.model.Door;
 import kdg.model.Game;
 import kdg.model.Item;
 import kdg.model.Timer;
+import kdg.model.HighscoreManager;
 import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
+import kdg.view.highscorescherm.HighscoreschermPresenter;
+import kdg.view.highscorescherm.HighscoreschermView;
 
 import java.util.List;
 
@@ -21,15 +25,19 @@ import java.util.List;
  */
 public class SpelschermPresenter {
 
+    private static final String EINDKAMER_NAAM = "Eindkamer";
+
     private final Game game;
     private final Timer timer;
+    private final HighscoreManager hsManager;
     private final SpelschermView view;
     private Timeline timerTimeline;
 
-    public SpelschermPresenter(Game game, Timer timer, SpelschermView view) {
-        this.game  = game;
-        this.timer = timer;
-        this.view  = view;
+    public SpelschermPresenter(Game game, Timer timer, HighscoreManager hsManager, SpelschermView view) {
+        this.game      = game;
+        this.timer     = timer;
+        this.hsManager = hsManager;
+        this.view      = view;
         this.addEventHandlers();
         this.updateView();
         this.startTimer();
@@ -54,6 +62,16 @@ public class SpelschermPresenter {
                 toonMelding("Je hebt dit item al.");
             }
             updateView();
+        });
+
+        // Ga door deur — knop
+        view.getGaDoorDeurKnop().setOnAction(e -> beweegDoorGeselecteerdeDeur());
+
+        // Ga door deur — dubbelklik op uitgangenLijst
+        view.getUitgangenLijst().setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.PRIMARY && e.getClickCount() == 2) {
+                beweegDoorGeselecteerdeDeur();
+            }
         });
 
         // Gebruik item op deur
@@ -111,6 +129,52 @@ public class SpelschermPresenter {
             helpStage.setScene(new Scene(helpView, 600, 400));
             helpStage.show();
         });
+    }
+
+    private void beweegDoorGeselecteerdeDeur() {
+        int index = view.getUitgangenLijst().getSelectionModel().getSelectedIndex();
+        if (index < 0) {
+            toonMelding("Selecteer eerst een uitgang.");
+            return;
+        }
+        List<Door> deuren = game.getCurrentRoom().getExits();
+        if (index >= deuren.size()) return;
+
+        Door deur = deuren.get(index);
+        if (deur.isLocked()) {
+            toonMelding("Deze deur is op slot. Gebruik het juiste item.");
+            return;
+        }
+        game.moveThroughDoor(deur);
+        updateView();
+        controleerWinConditie();
+    }
+
+    private void controleerWinConditie() {
+        if (!game.getCurrentRoom().getName().equals(EINDKAMER_NAAM)) return;
+
+        timerTimeline.stop();
+        timer.pauze();
+        game.win();
+
+        int verstreken = timer.getVerstrekenSeconden();
+        hsManager.voegScoreToe(game.getPlayer().getName(), verstreken);
+
+        int min = verstreken / 60;
+        int sec = verstreken % 60;
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Ontsnapt!");
+        alert.setHeaderText(null);
+        alert.setContentText(String.format(
+                "Gefeliciteerd! Je bent ontsnapt in %d minuten en %d seconden!", min, sec));
+        alert.showAndWait();
+
+        HighscoreschermView hsView = new HighscoreschermView();
+        new HighscoreschermPresenter(hsManager, hsView);
+        Stage hsStage = new Stage();
+        hsStage.setTitle("Highscores");
+        hsStage.setScene(new Scene(hsView, 500, 400));
+        hsStage.show();
     }
 
     private void startTimer() {
