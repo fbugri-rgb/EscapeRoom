@@ -2,12 +2,16 @@ package kdg.view.spelscherm;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import kdg.model.Door;
 import kdg.model.Game;
 import kdg.model.Item;
 import kdg.model.Timer;
+import kdg.view.helpscherm.HelpschermPresenter;
+import kdg.view.helpscherm.HelpschermView;
 
 import java.util.List;
 
@@ -100,7 +104,12 @@ public class SpelschermPresenter {
 
         // Menu: Spelregels
         view.getSpelregelsItem().setOnAction(e -> {
-            // TODO: open HelpschermView
+            HelpschermView helpView = new HelpschermView();
+            new HelpschermPresenter(helpView);
+            Stage helpStage = new Stage();
+            helpStage.setTitle("Spelregels");
+            helpStage.setScene(new Scene(helpView, 600, 400));
+            helpStage.show();
         });
     }
 

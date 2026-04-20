@@ -5,6 +5,12 @@ import javafx.stage.Stage;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
 import kdg.model.Timer;
+import kdg.view.helpscherm.HelpschermPresenter;
+import kdg.view.helpscherm.HelpschermView;
+import kdg.view.aboutscherm.AboutschermPresenter;
+import kdg.view.aboutscherm.AboutschermView;
+import kdg.view.highscorescherm.HighscoreschermPresenter;
+import kdg.view.highscorescherm.HighscoreschermView;
 import kdg.view.spelscherm.SpelschermPresenter;
 import kdg.view.spelscherm.SpelschermView;
 
@@ -56,16 +62,34 @@ public class StartschermPresenter {
         });
 
         view.getHighscoresKnop().setOnAction(e -> {
-            // TODO: open HighscoreschermView in nieuw Stage
+            HighscoreschermView hsView = new HighscoreschermView();
+            new HighscoreschermPresenter(new kdg.model.HighscoreManager(), hsView);
+            Stage hsStage = new Stage();
+            hsStage.setTitle("Highscores");
+            hsStage.setScene(new Scene(hsView, 500, 400));
+            hsStage.show();
         });
 
-        view.getHelpKnop().setOnAction(e -> {
-            // TODO: open HelpschermView in nieuw Stage
-        });
+        view.getHelpKnop().setOnAction(e -> openHelpscherm());
 
         view.getOverOnsKnop().setOnAction(e -> {
-            // TODO: open AboutschermView in nieuw Stage
+            AboutschermView aboutView = new AboutschermView();
+            new AboutschermPresenter(aboutView);
+            Stage aboutStage = new Stage();
+            aboutStage.setTitle("Over ons");
+            aboutStage.setScene(new Scene(aboutView, 400, 300));
+            aboutStage.show();
         });
+    }
+
+    private void openHelpscherm() {
+        HelpschermView helpView = new HelpschermView();
+        new HelpschermPresenter(helpView);
+
+        Stage helpStage = new Stage();
+        helpStage.setTitle("Spelregels");
+        helpStage.setScene(new Scene(helpView, 600, 400));
+        helpStage.show();
     }
 
     private void updateView() {

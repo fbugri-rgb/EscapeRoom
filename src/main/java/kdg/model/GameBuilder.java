@@ -11,7 +11,7 @@ import java.util.List;
 public class GameBuilder {
     public static Game buildGame(){
         // ----- Items ------
-        Item zaklamp = new Item("Zaklamp_01", "Zaklampt", "Een oude zaklamp, heeft batterijen nodig om licht te geven.");
+        Item zaklamp = new Item("Zaklamp_01", "Zaklamp", "Een oude zaklamp, heeft batterijen nodig om licht te geven.");
         Item batterij = new Item("Batterij_01", "Batterij", "Een AA batterij");
         Item notitie = new Item("Notitie_01", "Notitie", "Hier kan je een aanwijzing vinden.");
         Item keykard = new Item("Keykard_01", "Keykard", "Dit is de kaard van professor Cools, geeft toegang tot het laboratorium.");
