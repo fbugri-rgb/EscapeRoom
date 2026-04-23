@@ -54,7 +54,7 @@ No JUnit test classes exist yet. `GameTestApp` is a manual test runner in `src/m
 
 ## Project Context
 Java programmeerproject voor Karel de Grote Hogeschool (academiejaar 2025-2026).
-Twee studenten: Borja Cools (model) en Farok Bugri(GUI/view).
+Twee studenten: Borja C (model) en Farok Bugri(GUI/view).
 GitHub: https://github.com/Borja-cools/EscapeRoom.git
 
 ## Architectuur: Model-View-Presenter (MVP)

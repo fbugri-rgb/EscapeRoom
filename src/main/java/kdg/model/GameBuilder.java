@@ -25,9 +25,9 @@ public class GameBuilder {
         // ------ Rooms ------
         Room beginKamer = new Room("BeginKamer", "Beginkamer ");
         Room gang = new Room("Gang", "Een lange industriële gang. Meerdere deuren, de meeste afgesloten.");
-        Room opslagruimte = new Room("Opslagruimte", "Volle rekken met materiaal. Ergens moet hier iets nuttigs zijn.");
+        Room opslagruimte = new Room("Opslagruimte", "Volle rekken met materiaal. Op een van de rekken ligt de keykard van professor Cools.");
         Room labo = new Room("Labo", "Computerschermen flikkeren. Een terminal vraagt een wachtwoord.");
-        Room controlekamer = new Room("Controlekamer", "De centrale computer staat hier. Alles wat je nodig hebt om te ontsnappen.");
+        Room controlekamer = new Room("Controlekamer", "De centrale computer staat hier. Schakelars en monitoren bedekken de muren.");
         Room eindkamer = new Room("Eindkamer", "Een zware bunkerdeur. Daglicht sijpelt door de kieren.");
         // ------ Items in Rooms ------
         beginKamer.addItem(zaklamp);
@@ -35,10 +35,9 @@ public class GameBuilder {
 
         opslagruimte.addItem(schroevendraaier);
         opslagruimte.addItem(zekering);
+        opslagruimte.addItem(keykard);
 
         labo.addItem(notitie);
-
-        controlekamer.addItem(keykard);
 
         // ------ Doors ------
         Door startNaarGang = new Door(beginKamer, gang, false, null);

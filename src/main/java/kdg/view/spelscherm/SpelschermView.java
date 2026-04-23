@@ -33,6 +33,7 @@ public class SpelschermView extends BorderPane {
     // BOTTOM
     private Label timerLabel;
     private Button gebruikItemKnop;
+    private Label itemBeschrijvingLabel;
 
     public SpelschermView() {
         this.initialiseNodes();
@@ -52,7 +53,6 @@ public class SpelschermView extends BorderPane {
         helpMenu.getItems().add(spelregelsItem);
 
         menuBalk = new MenuBar(spelMenu, helpMenu);
-        menuBalk.setStyle("-fx-background-color: #2a2a2a; -fx-text-fill: #00ff41;");
 
         // LEFT
         kamerNaamLabel = new Label("...");
@@ -83,10 +83,22 @@ public class SpelschermView extends BorderPane {
         timerLabel.setStyle("-fx-text-fill: #00ff41; -fx-font-family: monospace; -fx-font-size: 16px; -fx-font-weight: bold;");
 
         gebruikItemKnop = maakKnop("Gebruik item op deur");
+
+        itemBeschrijvingLabel = new Label("Selecteer een item om de beschrijving te zien.");
+        itemBeschrijvingLabel.setStyle("""
+                -fx-text-fill: #aaaaaa;
+                -fx-font-family: monospace;
+                -fx-font-size: 12px;
+                -fx-font-style: italic;
+                """);
+        itemBeschrijvingLabel.setMaxWidth(400);
+        itemBeschrijvingLabel.setWrapText(true);
     }
 
     private void layoutNodes() {
         this.setStyle("-fx-background-color: #1a1a1a;");
+        this.getStylesheets().add(
+                getClass().getResource("/css/stijl.css").toExternalForm());
 
         // TOP
         this.setTop(menuBalk);
@@ -118,7 +130,7 @@ public class SpelschermView extends BorderPane {
 
         // BOTTOM
         Label tijerTitelLabel = maakSectieLabel("Tijd:");
-        HBox onder = new HBox(12, tijerTitelLabel, timerLabel, gebruikItemKnop);
+        HBox onder = new HBox(12, tijerTitelLabel, timerLabel, gebruikItemKnop, itemBeschrijvingLabel);
         onder.setPadding(new Insets(12, 16, 12, 16));
         onder.setAlignment(Pos.CENTER_LEFT);
         onder.setStyle("-fx-background-color: #2a2a2a; -fx-border-color: #00ff41; -fx-border-width: 1 0 0 0;");
@@ -168,6 +180,7 @@ public class SpelschermView extends BorderPane {
     Button getGaDoorDeurKnop()      { return gaDoorDeurKnop; }
     Button getOppakkenKnop()        { return oppakkenKnop; }
     ListView<String> getInventoryLijst()  { return inventoryLijst; }
-    Label getTimerLabel()           { return timerLabel; }
-    Button getGebruikItemKnop()     { return gebruikItemKnop; }
+    Label getTimerLabel()            { return timerLabel; }
+    Button getGebruikItemKnop()      { return gebruikItemKnop; }
+    Label getItemBeschrijvingLabel() { return itemBeschrijvingLabel; }
 }

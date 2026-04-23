@@ -2,8 +2,10 @@ package kdg.view.spelscherm;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -16,6 +18,8 @@ import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
+import kdg.view.startscherm.StartschermPresenter;
+import kdg.view.startscherm.StartschermView;
 
 import java.util.List;
 
@@ -39,6 +43,7 @@ public class SpelschermPresenter {
         this.hsManager = hsManager;
         this.view      = view;
         this.addEventHandlers();
+        this.addWindowEventHandlers();
         this.updateView();
         this.startTimer();
     }
@@ -105,6 +110,24 @@ public class SpelschermPresenter {
             updateView();
         });
 
+        // Beschrijving kameritem bij selectie
+        view.getKamerItemsLijst().getSelectionModel().selectedIndexProperty().addListener((obs, oud, nieuw) -> {
+            int index = nieuw.intValue();
+            List<Item> items = game.getCurrentRoom().getItems();
+            if (index >= 0 && index < items.size()) {
+                view.getItemBeschrijvingLabel().setText(items.get(index).getDescription());
+            }
+        });
+
+        // Beschrijving inventory-item bij selectie
+        view.getInventoryLijst().getSelectionModel().selectedIndexProperty().addListener((obs, oud, nieuw) -> {
+            int index = nieuw.intValue();
+            List<Item> inventory = game.getPlayer().getInventory().getItems();
+            if (index >= 0 && index < inventory.size()) {
+                view.getItemBeschrijvingLabel().setText(inventory.get(index).getDescription());
+            }
+        });
+
         // Menu: Pauzeren
         view.getPauzerenItem().setOnAction(e -> {
             timer.pauze();
@@ -114,10 +137,15 @@ public class SpelschermPresenter {
 
         // Menu: Stoppen
         view.getStoppenItem().setOnAction(e -> {
-            timer.pauze();
-            timerTimeline.stop();
-            game.stop();
-            // TODO: terug naar startscherm
+            if (toonBevestigingsdialoog()) {
+                timerTimeline.stop();
+                timer.pauze();
+                StartschermView startView = new StartschermView();
+                new StartschermPresenter(game, startView);
+                Stage stage = (Stage) view.getScene().getWindow();
+                stage.setScene(new Scene(startView, 800, 600));
+                stage.setTitle("Bunker-17");
+            }
         });
 
         // Menu: Spelregels
@@ -234,6 +262,9 @@ public class SpelschermPresenter {
             view.getInventoryLijst().getItems().add(item.getName());
         }
 
+        // Beschrijving resetten bij kamerwissel
+        view.getItemBeschrijvingLabel().setText("Selecteer een item om de beschrijving te zien.");
+
         // Timer initieel vullen
         updateTimerLabel();
     }
@@ -252,5 +283,35 @@ public class SpelschermPresenter {
         alert.setHeaderText(null);
         alert.setContentText(bericht);
         alert.showAndWait();
+    }
+
+    private boolean toonBevestigingsdialoog() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Stoppen");
+        alert.setHeaderText(null);
+        alert.setContentText("Ben je zeker dat je wil stoppen? Je voortgang gaat verloren.");
+        ButtonType ja = new ButtonType("Ja, stoppen");
+        ButtonType annuleren = new ButtonType("Annuleren");
+        alert.getButtonTypes().setAll(ja, annuleren);
+        return alert.showAndWait().filter(r -> r == ja).isPresent();
+    }
+
+    private void addWindowEventHandlers() {
+        view.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obs2, oldWin, newWin) -> {
+                    if (newWin != null) {
+                        newWin.setOnCloseRequest(e -> {
+                            if (toonBevestigingsdialoog()) {
+                                timerTimeline.stop();
+                                Platform.exit();
+                            } else {
+                                e.consume();
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }

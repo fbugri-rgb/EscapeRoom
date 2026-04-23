@@ -1,0 +1,28 @@
+.menu-bar {
+    -fx-background-color: #2a2a2a;
+}
+.menu-bar .menu .label {
+    -fx-text-fill: #00ff41;
+    -fx-font-family: monospace;
+    -fx-font-size: 13px;
+}
+.menu-bar .menu:hover,
+.menu-bar .menu:showing {
+    -fx-background-color: #3a3a3a;
+}
+.menu-bar .menu:hover > .label,
+.menu-bar .menu:showing > .label {
+    -fx-text-fill: #00ff41;
+}
+.context-menu {
+    -fx-background-color: #2a2a2a;
+    -fx-border-color: #00ff41;
+    -fx-border-width: 1px;
+}
+.menu-item .label {
+    -fx-text-fill: #00ff41;
+    -fx-font-family: monospace;
+}
+.menu-item:hover {
+    -fx-background-color: #3a3a3a;
+}

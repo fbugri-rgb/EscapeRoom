@@ -1,6 +1,9 @@
 package kdg.view.startscherm;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
@@ -30,6 +33,7 @@ public class StartschermPresenter {
         this.model = model;
         this.view = view;
         this.addEventHandlers();
+        this.addWindowEventHandlers();
         this.updateView();
     }
 
@@ -96,5 +100,32 @@ public class StartschermPresenter {
 
     private void updateView() {
         // Startscherm heeft geen dynamische data bij opstarten
+    }
+
+    private void addWindowEventHandlers() {
+        view.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (newScene != null) {
+                newScene.windowProperty().addListener((obs2, oldWin, newWin) -> {
+                    if (newWin != null) {
+                        newWin.setOnCloseRequest(e -> {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Afsluiten");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Wil je Bunker-17 afsluiten?");
+                            ButtonType ja = new ButtonType("Ja");
+                            ButtonType annuleren = new ButtonType("Annuleren");
+                            alert.getButtonTypes().setAll(ja, annuleren);
+                            boolean bevestigd = alert.showAndWait()
+                                    .filter(r -> r == ja).isPresent();
+                            if (bevestigd) {
+                                Platform.exit();
+                            } else {
+                                e.consume();
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }

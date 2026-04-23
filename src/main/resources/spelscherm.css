@@ -1,0 +1,27 @@
+.menu-bar {
+    -fx-background-color: #2a2a2a;
+    -fx-padding: 0;
+}
+
+.menu-bar > .menu {
+    -fx-background-color: transparent;
+    -fx-padding: 4 10 4 10;
+}
+
+.menu-bar > .menu > .label {
+    -fx-text-fill: #00ff41;
+    -fx-font-family: monospace;
+    -fx-font-size: 13px;
+}
+
+.menu-bar > .menu:hover,
+.menu-bar > .menu:focused,
+.menu-bar > .menu:showing {
+    -fx-background-color: #3a3a3a;
+}
+
+.menu-bar > .menu:hover > .label,
+.menu-bar > .menu:focused > .label,
+.menu-bar > .menu:showing > .label {
+    -fx-text-fill: #00ff41;
+}
