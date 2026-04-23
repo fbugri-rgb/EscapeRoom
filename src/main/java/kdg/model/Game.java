@@ -1,6 +1,7 @@
 package kdg.model;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Borja
@@ -12,9 +13,10 @@ public class Game {
     private Player player;
     private List<Room> rooms;
     private Room currentRoom;
+    private List<Item> verborgenItems;
 
     // Constructor
-    public Game(Player player, List<Room> rooms, Room currentRoom) {
+    public Game(Player player, List<Room> rooms, Room currentRoom, List<Item> verborgenItems) {
         // Checks
         if (player == null) {
             throw new IllegalArgumentException("player mag niet null zijn");
@@ -32,9 +34,12 @@ public class Game {
         this.player = player;
         this.rooms = rooms;
         this.currentRoom = currentRoom;
+        this.verborgenItems = verborgenItems != null ? verborgenItems : List.of();
     }
 
-    public Game(){}
+    public Game() {
+        this.verborgenItems = List.of();
+    }
 
     // Methodes voor het spel te delegeren
     public void start(){}
@@ -89,9 +94,10 @@ public class Game {
         if (puzzel == null) return false;
         boolean opgelost = puzzel.probeerOplossen(poging);
         if (opgelost) {
-            Item sleutel = new Item("Sleutel_01", "Sleutel",
-                    "Een zware metalen sleutel. Past op de bunkerdeur naar de uitgang.");
-            currentRoom.addItem(sleutel);
+            Optional<Item> sleutel = verborgenItems.stream()
+                    .filter(item -> item.getId().equals("Sleutel_01"))
+                    .findFirst();
+            sleutel.ifPresent(currentRoom::addItem);
         }
         return opgelost;
     }

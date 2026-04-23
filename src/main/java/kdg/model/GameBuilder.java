@@ -1,5 +1,6 @@
 package kdg.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +19,9 @@ public class GameBuilder {
         Item batterij = new Item("Batterij_01", "Batterij", "Een AA batterij.");
         Item notitie  = new Item("Notitie_01",  "Notitie",  "Een verkreukeld papier. Er staat op: 'Toegangscode terminal: naam bunker + bouwjaar (19__). Herstel de stroom via de zekeringkast in de controlekamer. De code vind je op het gereedschap.'");
         Item keykard  = new Item("Keykard_01",  "Keykard",  "De keycard van professor Cools, geeft toegang tot het laboratorium.");
-        Item zekering        = new Item("Zekering_01",        "Zekering",        "Een afgeslagen zekering. De stroom kan worden hersteld door de zekering terug te plaatsen.");
+        Item zekering         = new Item("Zekering_01",         "Zekering",         "Een afgeslagen zekering. De stroom kan worden hersteld door de zekering terug te plaatsen.");
         Item schroevendraaier = new Item("Schroevendraaier_01", "Schroevendraaier", "Een oude schroevendraaier. Er is een code op het handvat gegraveerd: 4-7-9");
+        Item sleutel          = new Item("Sleutel_01",          "Sleutel",          "Een zware metalen sleutel. Past op de bunkerdeur naar de uitgang.");
 
         // ------ Rooms ------
         Room beginKamer   = new Room("BeginKamer",   "Je wordt wakker op een koude betonvloer. Rood noodlicht flikkert aan het plafond. Een metalen deur staat op een kier.");
@@ -72,6 +74,9 @@ public class GameBuilder {
         Player player = new Player(spelerNaam);
         List<Room> rooms = List.of(beginKamer, gang, opslagruimte, controlekamer, labo, eindkamer);
 
-        return new Game(player, rooms, beginKamer);
+        List<Item> verborgenItems = new ArrayList<>();
+        verborgenItems.add(sleutel);
+
+        return new Game(player, rooms, beginKamer, verborgenItems);
     }
 }
