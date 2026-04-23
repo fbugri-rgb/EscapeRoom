@@ -9,6 +9,8 @@ import java.util.List;
  *
  */
 public class Inventory {
+    public static final int MAX_ITEMS = 1;
+
     // Attributen klasse
     private final List<Item> items;
 
@@ -20,6 +22,7 @@ public class Inventory {
     // Item aan inventory toevoegen - technische actie
     public void addItem(Item item) {
         if (item == null) throw new IllegalArgumentException("item mag niet null zijn");
+        if (items.size() >= MAX_ITEMS) throw new IllegalStateException("Inventory vol!");
         this.items.add(item);
     }
 

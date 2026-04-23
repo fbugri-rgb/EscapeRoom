@@ -5,20 +5,63 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 
 ---
 
+## Huidige status (2026-04-23)
+
+### Wat werkt
+- Volledig speelbaar spel van begin tot einde via onderstaand speelpad
+- Alle 5 vereiste schermen geïmplementeerd (start, spel, help, highscore, about)
+- Twee puzzels als popup-venster:
+  - **Terminal** (Labo): wachtwoord `BUNKER17` → deur naar Controlekamer opent
+  - **Zekeringkast** (Controlekamer): code `4-7-9` (gegraveerd op schroevendraaier) → Sleutel verschijnt in kamer
+- Inventory limiet van 1 item; "Neerleggen"-knop om items te wisselen
+- Items oppakken en gebruiken op deuren
+- Deurnavigatie met knop en dubbelklik; slot-melding bij vergrendelde deuren
+- Item beschrijvingspaneel onderaan (toont `getDescription()` bij selectie)
+- Timer (countdown 10 min) met rood-markering onder 60 seconden
+- Winconditie: score opslaan in `highscores.txt`, highscorescherm openen
+- Terugkeer naar startscherm via Spel → Stoppen (bevestigingsdialoog)
+- X-knop: bevestigingsdialoog spelscherm (annuleren houdt open), eenvoudig op startscherm
+- MenuBar groen zichtbaar met hover via `css/stijl.css`
+
+### Speelpad
+```
+BeginKamer  → zaklamp + batterij oppakken
+  ↓ gangNaarOpslag (vereist zaklamp)
+Opslagruimte → notitie lezen (hint: BUNKER17 + "code op gereedschap")
+               keykard oppakken
+  ↓ gangNaarLabo (vereist keykard)
+Labo        → terminalPuzzel: "BUNKER17" → deur ontgrendelt
+  ↓ laboNaarControle (vereist terminal_01)
+Controlekamer → schroevendraaier inspecteren (beschrijving: "4-7-9")
+                zekering oppakken → zekeringPuzzel: "4-7-9" → Sleutel_01 verschijnt
+                sleutel oppakken
+  ↓ controleNaarEinde (vereist Sleutel_01)
+Eindkamer   → winconditie + highscore opslaan
+```
+
+### Nog open
+- JUnit 5 testklassen schrijven (Borja)
+- `highscores.txt` toevoegen aan `.gitignore`
+- GitHub push-rechten: `fbugri-rgb` heeft nog geen collaborator-toegang tot `Borja-cools/EscapeRoom`
+
+---
+
 ## 1. Overzicht schermen
 
 | Scherm | Klasse | Functie |
 |---|---|---|
 | **Startscherm** | `startscherm/` | Welkomstpagina, spelernaam invoeren, navigatie naar spel/help/highscore/about |
-| **Spelscherm** | `spelscherm/` | Kern van het spel: huidige kamer, items, deuren, inventory, timer |
-| **Helpscherm** | `helpscherm/` | Spelregels en uitleg gelezen uit een bestand (`spelregels.txt`) |
-| **Highscorescherm** | `highscorescherm/` | Top-scores inlezen uit en schrijven naar bestand (`highscores.txt`) |
+| **Spelscherm** | `spelscherm/` | Kern van het spel: kamer, items, deuren, inventory, timer, puzzels |
+| **Helpscherm** | `helpscherm/` | Spelregels gelezen uit `spelregels.txt` |
+| **Highscorescherm** | `highscorescherm/` | Top-scores lezen uit en schrijven naar `highscores.txt` |
 | **Aboutscherm** | `aboutscherm/` | Info over de makers, versie, opleidingsinstelling |
 
 Navigatie:
 - Startscherm → Spelscherm (nieuwe Scene op hetzelfde Stage)
-- Startscherm → Help/Highscore/About (apart Stage/popup-venster)
-- Spelscherm → Highscorescherm na winnen/verliezen
+- Startscherm → Help/Highscore/About (apart Stage/popup)
+- Spelscherm → Startscherm via Stoppen-menu (scene-wissel terug)
+- Spelscherm → Puzzelscherm (Terminal / Zekeringkast) als popup Stage
+- Spelscherm → Highscorescherm na winnen
 
 ---
 
@@ -29,17 +72,18 @@ kdg/
 ├── Main.java                          ← DONE  JavaFX Application, start primary Stage
 │
 ├── model/
-│   ├── Game.java                      ← DONE  facade: pickupItem, moveThroughDoor, useItemOnDoor
-│   ├── GameBuilder.java               ← DONE  fabriek die volledig bedraad Game object maakt
+│   ├── Game.java                      ← DONE  pickupItem, moveThroughDoor, useItemOnDoor,
+│   │                                          losTerminalPuzzelOp, losZekeringPuzzelOp
+│   ├── GameBuilder.java               ← DONE  volledig bedraad scenario met 2 puzzels
 │   ├── Player.java                    ← DONE  naam + inventory
-│   ├── Inventory.java                 ← DONE  itemlijst met add/remove/getById
-│   ├── Room.java                      ← DONE  naam, beschrijving, items, deuren
+│   ├── Inventory.java                 ← DONE  MAX_ITEMS=1, add/remove/getById
+│   ├── Room.java                      ← DONE  naam, beschrijving, items, deuren, puzzels
 │   ├── Door.java                      ← DONE  bidirectioneel, lock/unlock via itemId
 │   ├── Item.java                      ← DONE  id, naam, beschrijving
-│   ├── Interactable.java              ← DONE  interface (stub, nog niet geïmplementeerd)
-│   ├── Timer.java                     ← DONE  countdown-timer, callback bij afloop
-│   ├── Puzzle.java                    ← TODO  optionele puzzellogica (wachtwoord, code)
-│   └── HighscoreManager.java          ← DONE  lees/schrijf highscores naar highscores.txt
+│   ├── Puzzle.java                    ← DONE  probeerOplossen() (trim + case-insensitive)
+│   ├── Interactable.java              ← DONE  interface (stub)
+│   ├── Timer.java                     ← DONE  countdown-timer
+│   └── HighscoreManager.java          ← DONE  lees/schrijf highscores.txt
 │
 └── view/
     ├── startscherm/
@@ -48,6 +92,11 @@ kdg/
     ├── spelscherm/
     │   ├── SpelschermView.java        ← DONE
     │   └── SpelschermPresenter.java   ← DONE
+    ├── puzzelscherm/
+    │   ├── PuzzelschermView.java      ← DONE  terminal popup (TextField, feedback)
+    │   ├── PuzzelschermPresenter.java ← DONE
+    │   ├── ZekeringPuzzelView.java    ← DONE  zekering popup (TextField, hint-label)
+    │   └── ZekeringPuzzelPresenter.java ← DONE
     ├── helpscherm/
     │   ├── HelpschermView.java        ← DONE
     │   └── HelpschermPresenter.java   ← DONE
@@ -63,7 +112,9 @@ kdg/
 ```
 src/main/resources/
 ├── spelregels.txt      ← DONE  gelezen door HelpschermPresenter
-└── highscores.txt      ← DONE  gelezen én geschreven door HighscoreManager
+├── highscores.txt      ← runtime  gelezen én geschreven door HighscoreManager
+└── css/
+    └── stijl.css       ← DONE  MenuBar en context-menu stijl
 ```
 
 ---
@@ -75,12 +126,15 @@ src/main/resources/
 | Taak | Status |
 |---|---|
 | `Game`, `Player`, `Inventory`, `Room`, `Door`, `Item` | DONE |
-| `GameBuilder` met volledig scenario | DONE |
+| `GameBuilder` met volledig scenario (2 puzzels, 6 kamers) | DONE |
 | `GameTestApp` (manuele tests) | DONE |
 | `Timer.java` — countdown met callback | DONE |
 | `HighscoreManager.java` — bestandsI/O | DONE |
 | Public getters op `Game` (`getCurrentRoom`, `getPlayer`, `getRooms`) | DONE |
-| `Puzzle.java` — wachtwoord-/codepuzzel | TODO |
+| `Puzzle.java` — probeerOplossen, isOpgelost | DONE |
+| `Room.java` uitbreiden met puzzellijst | DONE |
+| `Game.losTerminalPuzzelOp()` + `Game.losZekeringPuzzelOp()` | DONE |
+| `Inventory.MAX_ITEMS` limiet | DONE |
 | JUnit 5 testklassen in `src/test/java/kdg/` | TODO |
 
 ### Farok Bugri — View / GUI
@@ -93,53 +147,53 @@ src/main/resources/
 | `HelpschermView` + `HelpschermPresenter` | DONE |
 | `HighscoreschermView` + `HighscoreschermPresenter` | DONE |
 | `AboutschermView` + `AboutschermPresenter` | DONE |
+| `PuzzelschermView` + `PuzzelschermPresenter` (terminal) | DONE |
+| `ZekeringPuzzelView` + `ZekeringPuzzelPresenter` (zekeringkast) | DONE |
 | Menubalk (`MenuBar`) in spelscherm | DONE |
-| Scene-wissel (Startscherm → Spelscherm) | DONE |
-| Nieuw Stage openen (Help / Highscore / About als popup) | DONE |
+| Scene-wissel (Startscherm → Spelscherm en terug) | DONE |
+| Nieuw Stage openen (Help / Highscore / About / Puzzels als popup) | DONE |
 | `spelregels.txt` aanmaken en inlezen in helpscherm | DONE |
 | Deurnavigatie (knop + dubbelklik) | DONE |
 | Winconditie + highscore opslaan | DONE |
-| CSS-bestand voor stijl (optioneel) | TODO |
+| Terug naar startscherm via Stoppen-menu (bevestigingsdialoog) | DONE |
+| X-knop WindowEvent (spelscherm + startscherm) | DONE |
+| Item beschrijvingspaneel onderaan spelscherm | DONE |
+| Neerleggen-knop + drop-logica | DONE |
+| `controleerPuzzel()` — terminal + zekering detectie na deur/oppakken | DONE |
+| CSS-bestand voor MenuBar-stijl (`css/stijl.css`) | DONE |
 
 ---
 
 ## 4. Implementatievolgorde
 
-### Fase 1 — Fundament (model klaar maken) ✅
-1. **`Timer.java`** — countdown-timer met callback
-2. **Public getters op `Game`** — `getCurrentRoom()`, `getPlayer()`, `getRooms()`
-3. **`HighscoreManager.java`** — bestandsI/O
+### Fase 1 — Fundament ✅
+1. `Timer.java`, public getters op `Game`, `HighscoreManager.java`
 
-### Fase 2 — Skelet GUI opzetten ✅
-4. **`Main.java`** — primary Stage met startscene
-5. **`StartschermView` + `StartschermPresenter`** — spelernaam invoeren
-6. **Scene-wissel** naar spelscherm
+### Fase 2 — Skelet GUI ✅
+2. `Main.java`, `StartschermView` + `StartschermPresenter`, scene-wissel
 
-### Fase 3 — Spelscherm (kern) ✅
-7. **`SpelschermView`** — kameromschrijving, itemlijst, deurknoppen, inventory, timer-label
-8. **`SpelschermPresenter`** — koppelt `Game`-acties aan knoppen
-9. **Menubalk** in spelscherm
+### Fase 3 — Spelscherm kern ✅
+3. `SpelschermView`, `SpelschermPresenter`, menubalk
 
 ### Fase 4 — Secundaire schermen ✅
-10. **`HelpschermView` + `HelpschermPresenter`** — lees `spelregels.txt`
-11. **`HighscoreschermView` + `HighscoreschermPresenter`** — toon en schrijf scores
-12. **`AboutschermView` + `AboutschermPresenter`** — statische info
+4. Help, Highscore, About
 
-### Fase 5 — Afwerking ✅
-13. Deurnavigatie werkend (knop + dubbelklik, slot-melding)
-14. Winconditie: `game.win()`, score opslaan, highscorescherm tonen
-15. Stub-klassen verwijderd
+### Fase 5 — Navigatie & winconditie ✅
+5. Deurnavigatie, winconditie, highscore opslaan, terug naar startscherm, X-knop events, item beschrijvingspaneel, CSS
 
-### Fase 6 — Resterende taken (TODO)
-16. JUnit 5 testklassen schrijven (Borja)
-17. CSS-styling verfijnen (optioneel)
-18. Crashtesten: elk null-geval, elk foutpad doorlopen
+### Fase 6 — Puzzels & inventory ✅
+6. `Puzzle.java` + `Room.puzzels`, terminal puzzel (Labo), zekeringkast puzzel (Controlekamer), `PuzzelschermView/Presenter`, `ZekeringPuzzelView/Presenter`, inventory limiet (1 item), neerleggen-knop, volledig speelpad
+
+### Fase 7 — Resterende taken (TODO)
+7. JUnit 5 testklassen (Borja)
+8. `highscores.txt` toevoegen aan `.gitignore`
+9. Eindcontrole: crashtesten elk null-geval en foutpad
 
 ---
 
 ## 5. Evaluatiecriteria — checklist
 
-### Schermen
+### Schermen (min. 5)
 | Criterium | Status |
 |---|---|
 | Startscherm | DONE |
@@ -151,36 +205,39 @@ src/main/resources/
 ### JavaFX controls (min. 5 verschillende)
 | Control | Gebruikt in | Status |
 |---|---|---|
-| `Button` | Spelscherm, startscherm | DONE |
+| `Button` | Spelscherm, startscherm, puzzelschermen | DONE |
 | `Label` | Alle schermen | DONE |
-| `TextField` | Startscherm (spelernaam) | DONE |
+| `TextField` | Startscherm (naam), puzzelschermen (code/wachtwoord) | DONE |
 | `TextArea` | Helpscherm (spelregels), spelscherm (kamerbeschrijving) | DONE |
 | `ListView` | Spelscherm (deuren, items, inventory), highscorescherm | DONE |
 | `MenuBar` / `MenuItem` | Spelscherm | DONE |
+| `PasswordField` → vervangen door `TextField` | Puzzelscherm | DONE |
 
 ### Events (min. 3 verschillende)
 | Event | Waar | Status |
 |---|---|---|
-| `ActionEvent` (klikken op Button/MenuItem) | Alle schermen | DONE |
-| `MouseEvent` (dubbelklik op ListView) | Spelscherm (deurnavigatie) | DONE |
-| `KeyEvent` (toetsaanslag in TextField) | Startscherm (reset rode rand) | DONE |
+| `ActionEvent` (Button/MenuItem) | Alle schermen | DONE |
+| `MouseEvent` (dubbelklik ListView) | Spelscherm (deurnavigatie) | DONE |
+| `KeyEvent` (TextField onAction / onKeyTyped) | Startscherm + puzzelschermen | DONE |
+| `WindowEvent` (X-knop) | Spelscherm + startscherm | DONE |
+| `ChangeListener` (selectie in ListView) | Spelscherm (item beschrijving) | DONE |
 
 ### Layout panes (min. 3 verschillende)
 | Pane | Gebruikt in | Status |
 |---|---|---|
 | `BorderPane` | Alle schermen | DONE |
-| `VBox` | Startscherm, spelscherm (centrum/links/rechts) | DONE |
-| `HBox` | Spelscherm (bottom), alle sluit-knoppen | DONE |
+| `VBox` | Startscherm, spelscherm, puzzelschermen | DONE |
+| `HBox` | Spelscherm (bottom + knoppen), puzzelschermen | DONE |
 
 ### Overige vereisten
 | Criterium | Status |
 |---|---|
-| 1x van Scene wisselen (Startscherm → Spelscherm) | DONE |
-| 1x van Stage wisselen (popup Help / Highscore / About) | DONE |
+| 1x van Scene wisselen (Startscherm ↔ Spelscherm) | DONE |
+| 1x van Stage wisselen (popup Help / Highscore / About / Puzzels) | DONE |
 | Menubalk bovenaan | DONE |
 | Gegevens lezen uit bestand (`spelregels.txt`) | DONE |
 | Gegevens schrijven naar bestand (`highscores.txt`) | DONE |
-| Applicatie mag NOOIT crashen | Getest — alle null-gevallen afgedekt |
+| Applicatie mag NOOIT crashen | Inventory-limiet + null-checks afgedekt |
 
 ---
 
@@ -188,11 +245,9 @@ src/main/resources/
 
 | Beperking | Beschrijving |
 |---|---|
-| **`Puzzle.java` niet geïmplementeerd** | De klasse bestaat als stub maar bevat geen logica. Wachtwoord- of codepuzzels in kamers zijn niet aanwezig in het huidige spel. |
-| **`Interactable` interface niet gebruikt** | De interface is aangemaakt maar wordt door geen enkele klasse geïmplementeerd. Interactieve objecten (anders dan items/deuren) zijn niet uitgewerkt. |
-| **Geen JUnit 5 testklassen** | Er zijn nog geen geautomatiseerde tests in `src/test/java/kdg/`. `GameTestApp` is een manuele testrunner. |
-| **Spelscherm toont geen beschrijving bij items** | Items in de kamer tonen enkel naam, niet de beschrijving uit `Item.getDescription()`. |
-| **Geen terugknop vanuit spelscherm** | De speler kan niet terug naar het startscherm zonder de applicatie te herstarten (Stoppen-menu stopt enkel de timer). |
+| **`Interactable` interface niet gebruikt** | Aangemaakt als stub, wordt door geen klasse geïmplementeerd. |
+| **Geen JUnit 5 testklassen** | Enkel `GameTestApp` (manuele runner). Geautomatiseerde tests in `src/test/java/kdg/` ontbreken. |
+| **`highscores.txt` niet in `.gitignore`** | Runtime-bestand dat per ongeluk gecommit kan worden. |
 
 ---
 
@@ -200,7 +255,8 @@ src/main/resources/
 
 | Risico | Kans | Aanpak |
 |---|---|---|
-| **MVP-scheiding bewaken** — verleidelijk om logica in de View te zetten | Gemiddeld | Regel: als iets `Game` aanroept, hoort het in de Presenter |
-| **Bestandspaden** — `spelregels.txt` via classpath, `highscores.txt` relatief pad | Laag | Opgelost: `getResourceAsStream()` voor lezen; relatief pad voor schrijven |
-| **Timer op JavaFX thread** — `Timeline` gebruikt, niet `Thread.sleep` | Opgelost | `Timeline` met 1-seconde `KeyFrame` in `SpelschermPresenter` |
-| **Applicatie crasht op null** | Laag | Presenter controleert returnwaarden, toont `Alert`, gooit nooit exception naar UI |
+| **MVP-scheiding** — logica in View | Gemiddeld | Regel: `Game`-aanroepen horen in de Presenter |
+| **Bestandspaden** — classpath vs relatief | Laag | `getResourceAsStream()` voor lezen; relatief pad voor schrijven |
+| **Timer op JavaFX thread** | Opgelost | `Timeline` met 1s `KeyFrame` in `SpelschermPresenter` |
+| **Inventory-exception naar UI** | Opgelost | Pre-check in `Game.pickupItem()` vangt volle inventory op vóór `addItem()` |
+| **Puzzel opent telkens opnieuw** | Laag | `controleerPuzzel()` checkt `isOpgelost()` — popup verschijnt enkel eenmalig |

@@ -1,6 +1,5 @@
 package kdg.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,36 +14,44 @@ public class GameBuilder {
 
     public static Game buildGame(String spelerNaam) {
         // ----- Items ------
-        Item zaklamp = new Item("Zaklamp_01", "Zaklamp", "Een oude zaklamp, heeft batterijen nodig om licht te geven.");
-        Item batterij = new Item("Batterij_01", "Batterij", "Een AA batterij");
-        Item notitie = new Item("Notitie_01", "Notitie", "Hier kan je een aanwijzing vinden.");
-        Item keykard = new Item("Keykard_01", "Keykard", "Dit is de kaard van professor Cools, geeft toegang tot het laboratorium.");
-        Item zekering = new Item("Zekering_01", "Zekering", "De zekering is afgeslagen. stroom kan worden aangezet door de zekering te draaien.");
-        Item schroevendraaier = new Item("Schroevendraaier_01", "schroevendraaier", "Schroevendraaier om iets mee vast te zetten.");
+        Item zaklamp  = new Item("Zaklamp_01",  "Zaklamp",  "Een oude zaklamp, heeft batterijen nodig om licht te geven.");
+        Item batterij = new Item("Batterij_01", "Batterij", "Een AA batterij.");
+        Item notitie  = new Item("Notitie_01",  "Notitie",  "Een verkreukeld papier. Er staat op: 'Toegangscode terminal: naam bunker + bouwjaar (19__). Herstel de stroom via de zekeringkast in de controlekamer. De code vind je op het gereedschap.'");
+        Item keykard  = new Item("Keykard_01",  "Keykard",  "De keycard van professor Cools, geeft toegang tot het laboratorium.");
+        Item zekering        = new Item("Zekering_01",        "Zekering",        "Een afgeslagen zekering. De stroom kan worden hersteld door de zekering terug te plaatsen.");
+        Item schroevendraaier = new Item("Schroevendraaier_01", "Schroevendraaier", "Een oude schroevendraaier. Er is een code op het handvat gegraveerd: 4-7-9");
 
         // ------ Rooms ------
-        Room beginKamer = new Room("BeginKamer", "Beginkamer ");
-        Room gang = new Room("Gang", "Een lange industriële gang. Meerdere deuren, de meeste afgesloten.");
-        Room opslagruimte = new Room("Opslagruimte", "Volle rekken met materiaal. Op een van de rekken ligt de keykard van professor Cools.");
-        Room labo = new Room("Labo", "Computerschermen flikkeren. Een terminal vraagt een wachtwoord.");
-        Room controlekamer = new Room("Controlekamer", "De centrale computer staat hier. Schakelars en monitoren bedekken de muren.");
-        Room eindkamer = new Room("Eindkamer", "Een zware bunkerdeur. Daglicht sijpelt door de kieren.");
+        Room beginKamer   = new Room("BeginKamer",   "Je wordt wakker op een koude betonvloer. Rood noodlicht flikkert aan het plafond. Een metalen deur staat op een kier.");
+        Room gang         = new Room("Gang",         "Een lange industriële gang. Buizen lopen langs het plafond. Twee deuren, beide op slot. Ergens druppelt water.");
+        Room opslagruimte = new Room("Opslagruimte", "Hoge rekken vol materiaal. Stof en roest overal. Misschien ligt hier iets nuttigs tussen het gereedschap.");
+        Room labo         = new Room("Labo",         "Computerschermen flikkeren in het donker. Een terminal knippert: WACHTWOORD VEREIST. Een deur achteraan is afgesloten.");
+        Room controlekamer = new Room("Controlekamer", "De centrale computer staat hier. Een zekeringkast aan de muur is open. Als je de stroom herstelt verschijnt misschien een toegangscode op het scherm.");
+        Room eindkamer    = new Room("Eindkamer",    "Een zware stalen bunkerdeur. Daglicht sijpelt door de kieren. Je hoort sirenes in de verte. VRIJHEID!");
+
         // ------ Items in Rooms ------
         beginKamer.addItem(zaklamp);
         beginKamer.addItem(batterij);
 
-        opslagruimte.addItem(schroevendraaier);
-        opslagruimte.addItem(zekering);
+        opslagruimte.addItem(notitie);
         opslagruimte.addItem(keykard);
 
-        labo.addItem(notitie);
+        controlekamer.addItem(zekering);
+        controlekamer.addItem(schroevendraaier);
+
+        // ------ Puzzels ------
+        Puzzle terminalPuzzel = new Puzzle("terminal_01", "BUNKER17");
+        labo.addPuzzel(terminalPuzzel);
+
+        Puzzle zekeringPuzzel = new Puzzle("zekering_01", "479");
+        controlekamer.addPuzzel(zekeringPuzzel);
 
         // ------ Doors ------
-        Door startNaarGang = new Door(beginKamer, gang, false, null);
-        Door gangNaarOpslag = new Door(gang, opslagruimte, true, zaklamp.getId());
-        Door gangNaarLabo = new Door(gang, labo, true, keykard.getId());
-        Door laboNaarControle = new Door(labo, controlekamer, false, null);
-        Door controleNaarEinde =  new Door(controlekamer, eindkamer, false, null);
+        Door startNaarGang    = new Door(beginKamer,    gang,         false, null);
+        Door gangNaarOpslag   = new Door(gang,          opslagruimte, true,  zaklamp.getId());
+        Door gangNaarLabo     = new Door(gang,          labo,         true,  keykard.getId());
+        Door laboNaarControle = new Door(labo,          controlekamer, true, "terminal_01");
+        Door controleNaarEinde = new Door(controlekamer, eindkamer,   true,  "Sleutel_01");
 
         // ------ Exits ------
         beginKamer.addExit(startNaarGang);

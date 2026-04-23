@@ -18,6 +18,12 @@ import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
+import kdg.model.Inventory;
+import kdg.model.Puzzle;
+import kdg.view.puzzelscherm.PuzzelschermPresenter;
+import kdg.view.puzzelscherm.PuzzelschermView;
+import kdg.view.puzzelscherm.ZekeringPuzzelPresenter;
+import kdg.view.puzzelscherm.ZekeringPuzzelView;
 import kdg.view.startscherm.StartschermPresenter;
 import kdg.view.startscherm.StartschermView;
 
@@ -63,9 +69,28 @@ public class SpelschermPresenter {
             boolean gelukt = game.pickupItem(item);
             if (gelukt) {
                 toonInfo("Je pakt op: " + item.getName());
+            } else if (game.getPlayer().getInventory().getItems().size() >= Inventory.MAX_ITEMS) {
+                toonMelding("Inventory vol! Je kan maar 1 item dragen. Leg eerst iets neer.");
             } else {
                 toonMelding("Je hebt dit item al.");
             }
+            updateView();
+            if (gelukt) controleerPuzzel();
+        });
+
+        // Neerleggen
+        view.getNeerleggenKnop().setOnAction(e -> {
+            int index = view.getInventoryLijst().getSelectionModel().getSelectedIndex();
+            if (index < 0) {
+                toonMelding("Selecteer eerst een item uit je inventory om neer te leggen.");
+                return;
+            }
+            List<Item> inventory = game.getPlayer().getInventory().getItems();
+            if (index >= inventory.size()) return;
+
+            Item item = inventory.get(index);
+            game.getPlayer().dropItem(item);
+            game.getCurrentRoom().addItem(item);
             updateView();
         });
 
@@ -176,6 +201,41 @@ public class SpelschermPresenter {
         game.moveThroughDoor(deur);
         updateView();
         controleerWinConditie();
+        controleerPuzzel();
+    }
+
+    private void controleerPuzzel() {
+        String kamer = game.getCurrentRoom().getName();
+
+        // Terminal puzzel in het Labo
+        if (kamer.equals("Labo")) {
+            Puzzle terminalPuzzel = game.getCurrentRoom().getPuzzelById("terminal_01");
+            if (terminalPuzzel != null && !terminalPuzzel.isOpgelost()) {
+                PuzzelschermView puzzelView = new PuzzelschermView();
+                Stage puzzelStage = new Stage();
+                puzzelStage.setTitle("Terminal");
+                puzzelStage.setScene(new Scene(puzzelView, 450, 300));
+                new PuzzelschermPresenter(game, puzzelStage, puzzelView, this::updateView);
+                puzzelStage.show();
+            }
+        }
+
+        // Zekeringkast puzzel in de Controlekamer
+        if (kamer.equals("Controlekamer")) {
+            Puzzle zekeringPuzzel = game.getCurrentRoom().getPuzzelById("zekering_01");
+            if (zekeringPuzzel != null && !zekeringPuzzel.isOpgelost()) {
+                if (game.getPlayer().hasItemById("Zekering_01")) {
+                    ZekeringPuzzelView zekeringView = new ZekeringPuzzelView();
+                    Stage zekeringStage = new Stage();
+                    zekeringStage.setTitle("Zekeringkast");
+                    zekeringStage.setScene(new Scene(zekeringView, 450, 320));
+                    new ZekeringPuzzelPresenter(game, zekeringStage, zekeringView, this::updateView);
+                    zekeringStage.show();
+                } else {
+                    toonMelding("Je hebt de Zekering nodig om de zekeringkast te activeren.");
+                }
+            }
+        }
     }
 
     private void controleerWinConditie() {

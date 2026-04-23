@@ -15,6 +15,7 @@ public class Room {
     private String description;
     private List<Item> roomItems;
     private List<Door> exits;
+    private List<Puzzle> puzzels;
 
     // Constructor
     public Room(String name, String description) {
@@ -27,6 +28,7 @@ public class Room {
         // initialiseren van lijsten voor geen nullPointerException te krijgen.
         this.roomItems = new ArrayList<>();
         this.exits = new ArrayList<>();
+        this.puzzels = new ArrayList<>();
     }
 
     // Items toevoegen aan Room
@@ -57,6 +59,24 @@ public class Room {
     // Uitgangen die aan de room zijn verbonden opvragen
     public List<Door> getExits(){
         return new ArrayList<>(this.exits);
+    }
+
+    // Puzzel toevoegen aan kamer
+    public void addPuzzel(Puzzle puzzel) {
+        if (puzzel != null) {
+            this.puzzels.add(puzzel);
+        }
+    }
+
+    public List<Puzzle> getPuzzels() {
+        return new ArrayList<>(this.puzzels);
+    }
+
+    public Puzzle getPuzzelById(String id) {
+        for (Puzzle p : puzzels) {
+            if (p.getPuzzelId().equals(id)) return p;
+        }
+        return null;
     }
 
     // Getters attributen

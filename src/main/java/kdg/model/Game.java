@@ -61,6 +61,8 @@ public class Game {
         if(item == null) return false;
         // check of speler al item heeft
         if(player.hasItem(item)) return false;
+        // check inventory capaciteit
+        if(player.getInventory().getItems().size() >= Inventory.MAX_ITEMS) return false;
 
         // Item uit room halen en inventory steken van speler
         if(currentRoom.getItems().contains(item)){
@@ -79,6 +81,32 @@ public class Game {
         if(!player.hasItem(item)) return false;
         // proberen deur te openen en returnen of het gelukt is
         return door.unlock(item.getId());
+    }
+
+    // Zekeringpuzzel oplossen: sleutel verschijnt in de kamer
+    public boolean losZekeringPuzzelOp(String puzzelId, String poging) {
+        Puzzle puzzel = currentRoom.getPuzzelById(puzzelId);
+        if (puzzel == null) return false;
+        boolean opgelost = puzzel.probeerOplossen(poging);
+        if (opgelost) {
+            Item sleutel = new Item("Sleutel_01", "Sleutel",
+                    "Een zware metalen sleutel. Past op de bunkerdeur naar de uitgang.");
+            currentRoom.addItem(sleutel);
+        }
+        return opgelost;
+    }
+
+    // Terminalpuzzel oplossen en bijbehorende deur ontgrendelen
+    public boolean losTerminalPuzzelOp(String puzzelId, String poging) {
+        Puzzle puzzel = currentRoom.getPuzzelById(puzzelId);
+        if (puzzel == null) return false;
+        boolean opgelost = puzzel.probeerOplossen(poging);
+        if (opgelost) {
+            for (Door deur : currentRoom.getExits()) {
+                deur.unlock(puzzelId);
+            }
+        }
+        return opgelost;
     }
 
     // Getters voor attributen klasse
