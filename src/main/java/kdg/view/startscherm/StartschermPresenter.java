@@ -7,24 +7,21 @@ import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
-import kdg.model.Timer;
-import kdg.view.helpscherm.HelpschermPresenter;
-import kdg.view.helpscherm.HelpschermView;
 import kdg.model.HighscoreManager;
 import kdg.view.aboutscherm.AboutschermPresenter;
 import kdg.view.aboutscherm.AboutschermView;
+import kdg.view.helpscherm.HelpschermPresenter;
+import kdg.view.helpscherm.HelpschermView;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
-import kdg.view.spelscherm.SpelschermPresenter;
-import kdg.view.spelscherm.SpelschermView;
+import kdg.view.introductiescherm.IntroductieschermPresenter;
+import kdg.view.introductiescherm.IntroductieschermView;
 
 /**
  * @author Farok
  * @version 2.0 20/04/2026
  */
 public class StartschermPresenter {
-
-    private static final int SPELTIJD_SECONDEN = 600; // 10 minuten
 
     private final Game model;
     private final StartschermView view;
@@ -48,16 +45,11 @@ public class StartschermPresenter {
                 return;
             }
 
-            Game nieuwSpel = GameBuilder.buildGame(naam);
-            Timer timer = new Timer(SPELTIJD_SECONDEN);
-            HighscoreManager hsManager = new HighscoreManager();
-
-            SpelschermView spelView = new SpelschermView();
-            new SpelschermPresenter(nieuwSpel, timer, hsManager, spelView);
-
             Stage stage = (Stage) view.getScene().getWindow();
-            stage.setScene(new Scene(spelView, 1000, 650));
-            stage.setTitle("Bunker-17 — " + naam);
+            IntroductieschermView introView = new IntroductieschermView();
+            new IntroductieschermPresenter(introView, naam, stage);
+            stage.setScene(new Scene(introView, 800, 500));
+            stage.setTitle("Bunker-17 — Introductie");
         });
 
         view.getNaamVeld().setOnKeyTyped(e -> {
