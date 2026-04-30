@@ -26,6 +26,9 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
   - `HelpschermPresenter`: fallback-tekst met basisregels bij ontbrekend/onleesbaar bestand
   - `HighscoreManager`: `scores.clear()` bij leesfouten; `RuntimeException` bij schrijffouten
   - `SpelschermPresenter`: `voegScoreToe()` omwikkeld in try-catch — crash bij schrijffout onmogelijk
+- `highscores.txt` toegevoegd aan `.gitignore`
+- `Item implements Interactable`: `interact()` (return true) + `inspect()` (return description)
+- Lege `Game()` constructor verwijderd (alle velden waren null, nergens in gebruik)
 
 ### Speelpad
 ```
@@ -45,7 +48,6 @@ Eindkamer   → winconditie + highscore opslaan
 
 ### Nog open
 - JUnit 5 testklassen schrijven (Borja)
-- `highscores.txt` toevoegen aan `.gitignore`
 - GitHub push-rechten: `fbugri-rgb` heeft nog geen collaborator-toegang tot `Borja-cools/EscapeRoom`
   (workaround: push naar fork `fbugri-rgb/EscapeRoom`)
 
@@ -196,9 +198,13 @@ src/main/resources/
 9. `HighscoreManager`: correcte foutafhandeling lezen én schrijven
 10. `SpelschermPresenter`: score opslaan crasht nooit meer de applicatie
 
-### Fase 8 — Resterende taken (TODO)
-11. JUnit 5 testklassen (Borja)
-12. `highscores.txt` toevoegen aan `.gitignore`
+### Fase 8 — Kleine fixes ✅
+11. `highscores.txt` toegevoegd aan `.gitignore`
+12. `Item implements Interactable` — `interact()` + `inspect()` geïmplementeerd
+13. Lege `Game()` constructor verwijderd
+
+### Fase 9 — Resterende taken (TODO)
+14. JUnit 5 testklassen (Borja)
 
 ---
 
@@ -256,9 +262,7 @@ src/main/resources/
 
 | Beperking | Beschrijving |
 |---|---|
-| **`Interactable` interface niet gebruikt** | Aangemaakt als stub, wordt door geen klasse geïmplementeerd. |
 | **Geen JUnit 5 testklassen** | Enkel `GameTestApp` (manuele runner). Geautomatiseerde tests in `src/test/java/kdg/` ontbreken. |
-| **`highscores.txt` niet in `.gitignore`** | Runtime-bestand dat per ongeluk gecommit kan worden. |
 
 ---
 
