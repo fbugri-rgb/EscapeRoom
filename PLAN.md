@@ -5,7 +5,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 
 ---
 
-## Huidige status (2026-04-23)
+## Huidige status (2026-04-30)
 
 ### Wat werkt
 - Volledig speelbaar spel van begin tot einde via onderstaand speelpad
@@ -22,6 +22,10 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 - Terugkeer naar startscherm via Spel → Stoppen (bevestigingsdialoog)
 - X-knop: bevestigingsdialoog spelscherm (annuleren houdt open), eenvoudig op startscherm
 - MenuBar groen zichtbaar met hover via `css/stijl.css`
+- Exception-audit uitgevoerd: alle stille catch-blokken gefixt
+  - `HelpschermPresenter`: fallback-tekst met basisregels bij ontbrekend/onleesbaar bestand
+  - `HighscoreManager`: `scores.clear()` bij leesfouten; `RuntimeException` bij schrijffouten
+  - `SpelschermPresenter`: `voegScoreToe()` omwikkeld in try-catch — crash bij schrijffout onmogelijk
 
 ### Speelpad
 ```
@@ -43,6 +47,7 @@ Eindkamer   → winconditie + highscore opslaan
 - JUnit 5 testklassen schrijven (Borja)
 - `highscores.txt` toevoegen aan `.gitignore`
 - GitHub push-rechten: `fbugri-rgb` heeft nog geen collaborator-toegang tot `Borja-cools/EscapeRoom`
+  (workaround: push naar fork `fbugri-rgb/EscapeRoom`)
 
 ---
 
@@ -161,6 +166,7 @@ src/main/resources/
 | Neerleggen-knop + drop-logica | DONE |
 | `controleerPuzzel()` — terminal + zekering detectie na deur/oppakken | DONE |
 | CSS-bestand voor MenuBar-stijl (`css/stijl.css`) | DONE |
+| Exception-audit + stille catch-blokken gefixt | DONE |
 
 ---
 
@@ -184,10 +190,15 @@ src/main/resources/
 ### Fase 6 — Puzzels & inventory ✅
 6. `Puzzle.java` + `Room.puzzels`, terminal puzzel (Labo), zekeringkast puzzel (Controlekamer), `PuzzelschermView/Presenter`, `ZekeringPuzzelView/Presenter`, inventory limiet (1 item), neerleggen-knop, volledig speelpad
 
-### Fase 7 — Resterende taken (TODO)
-7. JUnit 5 testklassen (Borja)
-8. `highscores.txt` toevoegen aan `.gitignore`
-9. Eindcontrole: crashtesten elk null-geval en foutpad
+### Fase 7 — Exception-hardening ✅
+7. Exception-audit: alle try-catch blokken geanalyseerd en stille fouten gefixt
+8. Fallback-tekst in `HelpschermPresenter` bij ontbrekend bestand
+9. `HighscoreManager`: correcte foutafhandeling lezen én schrijven
+10. `SpelschermPresenter`: score opslaan crasht nooit meer de applicatie
+
+### Fase 8 — Resterende taken (TODO)
+11. JUnit 5 testklassen (Borja)
+12. `highscores.txt` toevoegen aan `.gitignore`
 
 ---
 
@@ -237,7 +248,7 @@ src/main/resources/
 | Menubalk bovenaan | DONE |
 | Gegevens lezen uit bestand (`spelregels.txt`) | DONE |
 | Gegevens schrijven naar bestand (`highscores.txt`) | DONE |
-| Applicatie mag NOOIT crashen | Inventory-limiet + null-checks afgedekt |
+| Applicatie mag NOOIT crashen | Inventory-limiet + null-checks + exception-audit afgedekt |
 
 ---
 
