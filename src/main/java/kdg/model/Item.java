@@ -5,7 +5,7 @@ package kdg.model;
  * @version 1.0 04/02/2026 20:29
  *
  */
-public class Item {
+public class Item implements Interactable {
     private final String id;
     private final String name;
     private final String description;
@@ -22,6 +22,16 @@ public class Item {
         this.id = id;
         this.name = name;
         this.description = description;
+    }
+
+    @Override
+    public boolean Interact(Player player) {
+        return true;
+    }
+
+    @Override
+    public String inspect() {
+        return description;
     }
 
     // Getter voor item

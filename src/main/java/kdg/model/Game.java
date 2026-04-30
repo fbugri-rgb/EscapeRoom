@@ -37,10 +37,6 @@ public class Game {
         this.verborgenItems = verborgenItems != null ? verborgenItems : List.of();
     }
 
-    public Game() {
-        this.verborgenItems = List.of();
-    }
-
     // Methodes voor het spel te delegeren
     public void start(){}
     public void pause(){}
