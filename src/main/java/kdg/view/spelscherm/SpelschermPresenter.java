@@ -9,22 +9,25 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import kdg.model.DifficultyLevel;
 import kdg.model.Door;
 import kdg.model.Game;
 import kdg.model.Item;
 import kdg.model.Timer;
 import kdg.model.HighscoreManager;
+import kdg.model.Puzzle;
 import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
-import kdg.view.highscorescherm.HighscoreschermPresenter;
-import kdg.view.highscorescherm.HighscoreschermView;
-import kdg.model.Puzzle;
 import kdg.view.puzzelscherm.PuzzelschermPresenter;
 import kdg.view.puzzelscherm.PuzzelschermView;
 import kdg.view.puzzelscherm.ZekeringPuzzelPresenter;
 import kdg.view.puzzelscherm.ZekeringPuzzelView;
 import kdg.view.startscherm.StartschermPresenter;
 import kdg.view.startscherm.StartschermView;
+import kdg.view.verliesscherm.VerliesschermPresenter;
+import kdg.view.verliesscherm.VerliesschermView;
+import kdg.view.winscherm.WinschermPresenter;
+import kdg.view.winscherm.WinschermView;
 
 import java.util.List;
 
@@ -40,13 +43,18 @@ public class SpelschermPresenter {
     private final Timer timer;
     private final HighscoreManager hsManager;
     private final SpelschermView view;
+    private final Stage stage;
+    private final DifficultyLevel moeilijkheid;
     private Timeline timerTimeline;
 
-    public SpelschermPresenter(Game game, Timer timer, HighscoreManager hsManager, SpelschermView view) {
-        this.game      = game;
-        this.timer     = timer;
-        this.hsManager = hsManager;
-        this.view      = view;
+    public SpelschermPresenter(Game game, Timer timer, HighscoreManager hsManager,
+                               SpelschermView view, Stage stage, DifficultyLevel moeilijkheid) {
+        this.game         = game;
+        this.timer        = timer;
+        this.hsManager    = hsManager;
+        this.view         = view;
+        this.stage        = stage;
+        this.moeilijkheid = moeilijkheid;
         this.addEventHandlers();
         this.addWindowEventHandlers();
         this.updateView();
@@ -166,8 +174,7 @@ public class SpelschermPresenter {
                 timerTimeline.stop();
                 timer.pauze();
                 StartschermView startView = new StartschermView();
-                new StartschermPresenter(game, startView);
-                Stage stage = (Stage) view.getScene().getWindow();
+                new StartschermPresenter(startView, moeilijkheid);
                 stage.setScene(new Scene(startView, 800, 600));
                 stage.setTitle("Bunker-17");
             }
@@ -247,26 +254,27 @@ public class SpelschermPresenter {
 
         int verstreken = timer.getVerstrekenSeconden();
         try {
-            hsManager.voegScoreToe(game.getPlayer().getName(), verstreken);
+            hsManager.voegScoreToe(game.getPlayer().getName(), verstreken, moeilijkheid);
         } catch (Exception e) {
             System.err.println("Score opslaan mislukt: " + e.getMessage());
         }
 
-        int min = verstreken / 60;
-        int sec = verstreken % 60;
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Ontsnapt!");
-        alert.setHeaderText(null);
-        alert.setContentText(String.format(
-                "Gefeliciteerd! Je bent ontsnapt in %d minuten en %d seconden!", min, sec));
-        alert.showAndWait();
+        WinschermView winView = new WinschermView();
+        new WinschermPresenter(winView, stage, game.getPlayer().getName(),
+                verstreken, hsManager, moeilijkheid);
+        stage.setScene(new Scene(winView, 800, 600));
+        stage.setTitle("Bunker-17 — Ontsnapt!");
+    }
 
-        HighscoreschermView hsView = new HighscoreschermView();
-        new HighscoreschermPresenter(hsManager, hsView);
-        Stage hsStage = new Stage();
-        hsStage.setTitle("Highscores");
-        hsStage.setScene(new Scene(hsView, 500, 400));
-        hsStage.show();
+    private void controleerVerlies() {
+        timerTimeline.stop();
+        game.lose();
+
+        VerliesschermView verliesView = new VerliesschermView();
+        new VerliesschermPresenter(verliesView, stage,
+                game.getPlayer().getName(), moeilijkheid);
+        stage.setScene(new Scene(verliesView, 800, 500));
+        stage.setTitle("Bunker-17 — Tijd verstreken");
     }
 
     private void startTimer() {
@@ -275,9 +283,7 @@ public class SpelschermPresenter {
             timer.tick();
             updateTimerLabel();
             if (timer.isAfgelopen()) {
-                timerTimeline.stop();
-                game.lose();
-                toonMelding("Tijd is om! Je bent gevangen.");
+                controleerVerlies();
             }
         }));
         timerTimeline.setCycleCount(Timeline.INDEFINITE);

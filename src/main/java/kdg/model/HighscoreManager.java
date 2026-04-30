@@ -8,12 +8,13 @@ import java.util.List;
 
 /**
  * Beheert het lezen en schrijven van highscores naar/van highscores.txt.
- * Formaat per lijn: naam;verstrekenSeconden
+ * Formaat per lijn: naam;verstrekenSeconden;moeilijkheid
+ * bv. "Borja;85;Moeilijk"
  * Gesorteerd op verstrekenSeconden oplopend (snelste tijd = beste score).
  * Puur Java — geen JavaFX imports.
  *
  * @author Farok
- * @version 1.0 20/04/2026
+ * @version 1.1 30/04/2026
  */
 public class HighscoreManager {
 
@@ -22,27 +23,24 @@ public class HighscoreManager {
     public static class Highscore {
         private final String spelerNaam;
         private final int seconden;
+        private final DifficultyLevel moeilijkheid;
 
-        public Highscore(String spelerNaam, int seconden) {
+        public Highscore(String spelerNaam, int seconden, DifficultyLevel moeilijkheid) {
             if (spelerNaam == null || spelerNaam.isBlank()) {
                 throw new IllegalArgumentException("spelerNaam mag niet leeg zijn");
             }
             if (seconden < 0) {
                 throw new IllegalArgumentException("seconden mag niet negatief zijn");
             }
-            this.spelerNaam = spelerNaam;
-            this.seconden = seconden;
+            this.spelerNaam   = spelerNaam;
+            this.seconden     = seconden;
+            this.moeilijkheid = moeilijkheid != null ? moeilijkheid : DifficultyLevel.NORMAAL;
         }
 
-        public String getSpelerNaam() {
-            return spelerNaam;
-        }
+        public String getSpelerNaam()        { return spelerNaam; }
+        public int getSeconden()             { return seconden; }
+        public DifficultyLevel getMoeilijkheid() { return moeilijkheid; }
 
-        public int getSeconden() {
-            return seconden;
-        }
-
-        // Omzetten naar leesbaar formaat: mm:ss
         public String getTijdAlsTekst() {
             int minuten = seconden / 60;
             int sec = seconden % 60;
@@ -51,7 +49,7 @@ public class HighscoreManager {
 
         @Override
         public String toString() {
-            return spelerNaam + " — " + getTijdAlsTekst();
+            return spelerNaam + " — " + getTijdAlsTekst() + "  [" + moeilijkheid.getLabel() + "]";
         }
     }
 
@@ -83,8 +81,8 @@ public class HighscoreManager {
     // ---------- Public methodes ----------
 
     // Nieuwe score toevoegen, sorteren en opslaan
-    public void voegScoreToe(String spelerNaam, int seconden) {
-        scores.add(new Highscore(spelerNaam, seconden));
+    public void voegScoreToe(String spelerNaam, int seconden, DifficultyLevel moeilijkheid) {
+        scores.add(new Highscore(spelerNaam, seconden, moeilijkheid));
         scores.sort(Comparator.comparingInt(Highscore::getSeconden));
         if (scores.size() > MAX_SCORES) {
             scores.subList(MAX_SCORES, scores.size()).clear();
@@ -121,23 +119,35 @@ public class HighscoreManager {
 
     private void verwerkLijn(String lijn) {
         if (lijn.isEmpty()) return;
-        String[] delen = lijn.split(";", 2);
-        if (delen.length != 2) return;
+        String[] delen = lijn.split(";", 3);
+        if (delen.length < 2) return;
         try {
-            String naam = delen[0].trim();
-            int seconden = Integer.parseInt(delen[1].trim());
+            String naam     = delen[0].trim();
+            int seconden    = Integer.parseInt(delen[1].trim());
+            DifficultyLevel niveau = delen.length == 3
+                    ? parseMoeilijkheid(delen[2].trim())
+                    : DifficultyLevel.NORMAAL;
             if (!naam.isEmpty() && seconden >= 0) {
-                scores.add(new Highscore(naam, seconden));
+                scores.add(new Highscore(naam, seconden, niveau));
             }
         } catch (NumberFormatException e) {
             // Ongeldige lijn overslaan
         }
     }
 
+    private DifficultyLevel parseMoeilijkheid(String label) {
+        for (DifficultyLevel niveau : DifficultyLevel.values()) {
+            if (niveau.getLabel().equalsIgnoreCase(label)) return niveau;
+        }
+        return DifficultyLevel.NORMAAL;
+    }
+
     private void slaOpNaarBestand() {
         try (BufferedWriter writer = Files.newBufferedWriter(bestandspad)) {
             for (Highscore score : scores) {
-                writer.write(score.getSpelerNaam() + ";" + score.getSeconden());
+                writer.write(score.getSpelerNaam() + ";"
+                        + score.getSeconden() + ";"
+                        + score.getMoeilijkheid().getLabel());
                 writer.newLine();
             }
         } catch (IOException e) {

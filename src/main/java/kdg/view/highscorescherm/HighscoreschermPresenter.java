@@ -31,7 +31,10 @@ public class HighscoreschermPresenter {
         for (int i = 0; i < scores.size(); i++) {
             HighscoreManager.Highscore score = scores.get(i);
             view.getScoreLijst().getItems().add(
-                    String.format("%2d.  %-20s  %s", i + 1, score.getSpelerNaam(), score.getTijdAlsTekst())
+                    String.format("%2d.  %-20s  %s  [%s]",
+                            i + 1, score.getSpelerNaam(),
+                            score.getTijdAlsTekst(),
+                            score.getMoeilijkheid().getLabel())
             );
         }
     }

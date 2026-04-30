@@ -41,7 +41,7 @@ public class IntroductieschermPresenter {
                 overlevende.
 
                 De noodgenerator heeft nog %d minuten stroom.
-                Daarna sluit het ventilatiesysteem af — voor altijd.
+                Daarna sluit het ventilatiesysteem af, voor altijd!
 
                 Je moet ontsnappen. Nu.
 
@@ -64,7 +64,7 @@ public class IntroductieschermPresenter {
         HighscoreManager hs = new HighscoreManager();
 
         SpelschermView spelView = new SpelschermView();
-        new SpelschermPresenter(game, timer, hs, spelView);
+        new SpelschermPresenter(game, timer, hs, spelView, primaryStage, moeilijkheid);
 
         primaryStage.setScene(new Scene(spelView, 1000, 650));
         primaryStage.setTitle("Bunker-17 — " + spelerNaam);

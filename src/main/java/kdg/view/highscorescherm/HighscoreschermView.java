@@ -29,6 +29,7 @@ public class HighscoreschermView extends BorderPane {
                 "-fx-text-fill: #00ff41; -fx-font-family: monospace;");
 
         scoreLijst = new ListView<>();
+        scoreLijst.setPrefWidth(560);
         scoreLijst.setStyle("""
                 -fx-control-inner-background: #2a2a2a;
                 -fx-text-fill: #00ff41;
