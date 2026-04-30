@@ -6,7 +6,11 @@
       "Bash(./mvnw.cmd clean:*)",
       "Bash(git push *)",
       "Bash(git add *)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(mvnw.cmd clean *)",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./mvnw.cmd clean compile -q)",
+      "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./mvnw.cmd exec:java -Dexec.mainClass=\"kdg.model.GameTestApp\")",
+      "Bash(cmd.exe *)"
     ]
   }
 }

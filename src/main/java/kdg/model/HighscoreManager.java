@@ -115,7 +115,7 @@ public class HighscoreManager {
             }
             scores.sort(Comparator.comparingInt(Highscore::getSeconden));
         } catch (IOException e) {
-            // Bestand onleesbaar — starten met lege lijst, geen crash
+            scores.clear();
         }
     }
 
@@ -141,7 +141,7 @@ public class HighscoreManager {
                 writer.newLine();
             }
         } catch (IOException e) {
-            // Schrijven mislukt — score staat wel in geheugen, geen crash
+            throw new RuntimeException("Highscores konden niet worden opgeslagen: " + e.getMessage(), e);
         }
     }
 }

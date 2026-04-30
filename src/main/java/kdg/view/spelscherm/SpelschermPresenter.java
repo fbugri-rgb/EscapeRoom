@@ -246,7 +246,11 @@ public class SpelschermPresenter {
         game.win();
 
         int verstreken = timer.getVerstrekenSeconden();
-        hsManager.voegScoreToe(game.getPlayer().getName(), verstreken);
+        try {
+            hsManager.voegScoreToe(game.getPlayer().getName(), verstreken);
+        } catch (Exception e) {
+            System.err.println("Score opslaan mislukt: " + e.getMessage());
+        }
 
         int min = verstreken / 60;
         int sec = verstreken % 60;

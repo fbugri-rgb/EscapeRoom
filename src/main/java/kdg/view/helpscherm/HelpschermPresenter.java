@@ -23,13 +23,27 @@ public class HelpschermPresenter {
     private void laadSpelregels() {
         try (InputStream is = getClass().getResourceAsStream("/spelregels.txt")) {
             if (is == null) {
-                view.getSpelregelsArea().setText("Spelregels konden niet worden geladen.");
+                view.getSpelregelsArea().setText(
+                    "Spelregels konden niet worden geladen.\n\n" +
+                    "Basisregels:\n" +
+                    "1. Verken de kamers en pak items op.\n" +
+                    "2. Gebruik items om deuren te openen.\n" +
+                    "3. Los puzzels op om verder te gaan.\n" +
+                    "4. Bereik de eindkamer voor de tijd om is!"
+                );
                 return;
             }
             String tekst = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             view.getSpelregelsArea().setText(tekst);
         } catch (IOException e) {
-            view.getSpelregelsArea().setText("Fout bij het laden van de spelregels.");
+            view.getSpelregelsArea().setText(
+                "Spelregels konden niet worden geladen.\n\n" +
+                "Basisregels:\n" +
+                "1. Verken de kamers en pak items op.\n" +
+                "2. Gebruik items om deuren te openen.\n" +
+                "3. Los puzzels op om verder te gaan.\n" +
+                "4. Bereik de eindkamer voor de tijd om is!"
+            );
         }
     }
 
