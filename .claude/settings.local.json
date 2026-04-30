@@ -10,7 +10,9 @@
       "Bash(mvnw.cmd clean *)",
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./mvnw.cmd clean compile -q)",
       "Bash(JAVA_HOME=\"/c/Program Files/Java/jdk-21\" ./mvnw.cmd exec:java -Dexec.mainClass=\"kdg.model.GameTestApp\")",
-      "Bash(cmd.exe *)"
+      "Bash(cmd.exe *)",
+      "PowerShell(Get-Command *)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" clean compile -q 2>&1 | Select-Object -Last 10)"
     ]
   }
 }
