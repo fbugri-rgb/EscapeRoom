@@ -5,7 +5,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 
 ---
 
-## Huidige status (2026-04-30)
+## Huidige status (2026-04-30) — bijgewerkt fase 9
 
 ### Wat werkt
 - Volledig speelbaar spel van begin tot einde via onderstaand speelpad
@@ -29,6 +29,13 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 - `highscores.txt` toegevoegd aan `.gitignore`
 - `Item implements Interactable`: `interact()` (return true) + `inspect()` (return description)
 - Lege `Game()` constructor verwijderd (alle velden waren null, nergens in gebruik)
+- **Introductiescherm** toegevoegd: verhaaltekst tussen startscherm en spelscherm
+- **Moeilijkheidsgraad**: `DifficultyLevel` enum (MAKKELIJK/NORMAAL/MOEILIJK) met eigen tijd en inventory-limiet
+  - Optiescherm (`optiescherm/`) als popup vanuit startscherm
+  - Keuze bewaard bij "← Terug" via startscherm-constructor
+  - Timer en inventory passen zich aan op basis van gekozen level
+  - Verhaaltekst toont correcte minuten dynamisch
+- Leesteksten geel (#FFD700) in intro-, spel- en helpscherm
 
 ### Speelpad
 ```
@@ -64,8 +71,8 @@ Eindkamer   → winconditie + highscore opslaan
 | **Aboutscherm** | `aboutscherm/` | Info over de makers, versie, opleidingsinstelling |
 
 Navigatie:
-- Startscherm → Spelscherm (nieuwe Scene op hetzelfde Stage)
-- Startscherm → Help/Highscore/About (apart Stage/popup)
+- Startscherm → Introductiescherm → Spelscherm (scene-wisselingen op primary Stage)
+- Startscherm → Help/Highscore/About/Opties (apart Stage/popup)
 - Spelscherm → Startscherm via Stoppen-menu (scene-wissel terug)
 - Spelscherm → Puzzelscherm (Terminal / Zekeringkast) als popup Stage
 - Spelscherm → Highscorescherm na winnen
@@ -83,12 +90,13 @@ kdg/
 │   │                                          losTerminalPuzzelOp, losZekeringPuzzelOp
 │   ├── GameBuilder.java               ← DONE  volledig bedraad scenario met 2 puzzels
 │   ├── Player.java                    ← DONE  naam + inventory
-│   ├── Inventory.java                 ← DONE  MAX_ITEMS=1, add/remove/getById
+│   ├── Inventory.java                 ← DONE  maxItems (dynamisch), add/remove/getById
 │   ├── Room.java                      ← DONE  naam, beschrijving, items, deuren, puzzels
 │   ├── Door.java                      ← DONE  bidirectioneel, lock/unlock via itemId
-│   ├── Item.java                      ← DONE  id, naam, beschrijving
+│   ├── Item.java                      ← DONE  id, naam, beschrijving + Interactable
 │   ├── Puzzle.java                    ← DONE  probeerOplossen() (trim + case-insensitive)
-│   ├── Interactable.java              ← DONE  interface (stub)
+│   ├── Interactable.java              ← DONE  interface geïmplementeerd door Item
+│   ├── DifficultyLevel.java           ← DONE  enum MAKKELIJK/NORMAAL/MOEILIJK
 │   ├── Timer.java                     ← DONE  countdown-timer
 │   └── HighscoreManager.java          ← DONE  lees/schrijf highscores.txt
 │
@@ -110,6 +118,12 @@ kdg/
     ├── highscorescherm/
     │   ├── HighscoreschermView.java   ← DONE
     │   └── HighscoreschermPresenter.java ← DONE
+    ├── introductiescherm/
+    │   ├── IntroductieschermView.java     ← DONE  verhaal + start/terug knoppen
+    │   └── IntroductieschermPresenter.java ← DONE  dynamische tekst op basis van moeilijkheid
+    ├── optiescherm/
+    │   ├── OptieschermView.java           ← DONE  RadioButtons per moeilijkheidsgraad
+    │   └── OptieschermPresenter.java      ← DONE  Consumer<DifficultyLevel> callback
     └── aboutscherm/
         ├── AboutschermView.java       ← DONE
         └── AboutschermPresenter.java  ← DONE
@@ -141,7 +155,9 @@ src/main/resources/
 | `Puzzle.java` — probeerOplossen, isOpgelost | DONE |
 | `Room.java` uitbreiden met puzzellijst | DONE |
 | `Game.losTerminalPuzzelOp()` + `Game.losZekeringPuzzelOp()` | DONE |
-| `Inventory.MAX_ITEMS` limiet | DONE |
+| `Inventory.maxItems` dynamisch (via `DifficultyLevel`) | DONE |
+| `DifficultyLevel` enum — MAKKELIJK/NORMAAL/MOEILIJK | DONE |
+| `Game.setMoeilijkheid()` + `getMoeilijkheid()` | DONE |
 | JUnit 5 testklassen in `src/test/java/kdg/` | TODO |
 
 ### Farok Bugri — View / GUI
@@ -169,6 +185,11 @@ src/main/resources/
 | `controleerPuzzel()` — terminal + zekering detectie na deur/oppakken | DONE |
 | CSS-bestand voor MenuBar-stijl (`css/stijl.css`) | DONE |
 | Exception-audit + stille catch-blokken gefixt | DONE |
+| `IntroductieschermView` + `IntroductieschermPresenter` | DONE |
+| `OptieschermView` + `OptieschermPresenter` (moeilijkheid popup) | DONE |
+| Moeilijkheidsgraad bewaard bij terug-navigatie | DONE |
+| Verhaaltekst dynamisch (minuten op basis van level) | DONE |
+| Leesteksten geel (#FFD700) in intro-, spel- en helpscherm | DONE |
 
 ---
 
@@ -203,8 +224,14 @@ src/main/resources/
 12. `Item implements Interactable` — `interact()` + `inspect()` geïmplementeerd
 13. Lege `Game()` constructor verwijderd
 
-### Fase 9 — Resterende taken (TODO)
-14. JUnit 5 testklassen (Borja)
+### Fase 9 — Nieuwe features ✅
+14. Introductiescherm met dynamische verhaaltekst
+15. `DifficultyLevel` enum + optiescherm als popup
+16. Moeilijkheidsgraad door hele navigatieketen bewaard
+17. Gele leesteksten (#FFD700) in intro-, spel- en helpscherm
+
+### Fase 10 — Resterende taken (TODO)
+18. JUnit 5 testklassen (Borja)
 
 ---
 
@@ -228,6 +255,7 @@ src/main/resources/
 | `TextArea` | Helpscherm (spelregels), spelscherm (kamerbeschrijving) | DONE |
 | `ListView` | Spelscherm (deuren, items, inventory), highscorescherm | DONE |
 | `MenuBar` / `MenuItem` | Spelscherm | DONE |
+| `RadioButton` / `ToggleGroup` | Optiescherm (moeilijkheidsgraad) | DONE |
 | `PasswordField` → vervangen door `TextField` | Puzzelscherm | DONE |
 
 ### Events (min. 3 verschillende)
