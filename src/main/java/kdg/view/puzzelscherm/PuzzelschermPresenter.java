@@ -26,6 +26,7 @@ public class PuzzelschermPresenter {
         this.view       = view;
         this.onOpgelost = onOpgelost;
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(view.getBevestigenKnop(), view.getAnnulerenKnop());
     }
 
     private void addEventHandlers() {

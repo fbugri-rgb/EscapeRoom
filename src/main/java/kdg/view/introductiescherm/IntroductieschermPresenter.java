@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import kdg.model.DifficultyLevel;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
+import kdg.model.GeluidManager;
 import kdg.model.HighscoreManager;
 import kdg.model.Timer;
 import kdg.view.spelscherm.SpelschermPresenter;
@@ -30,6 +31,7 @@ public class IntroductieschermPresenter {
         this.moeilijkheid = moeilijkheid;
         this.primaryStage = primaryStage;
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(view.getStartKnop(), view.getTerugKnop());
         this.updateView();
     }
 

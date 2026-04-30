@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import kdg.model.DifficultyLevel;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
+import kdg.model.GeluidManager;
 import kdg.model.HighscoreManager;
 import kdg.view.aboutscherm.AboutschermPresenter;
 import kdg.view.aboutscherm.AboutschermView;
@@ -43,6 +44,9 @@ public class StartschermPresenter {
         this.view = view;
         this.gekozenMoeilijkheid = beginMoeilijkheid;
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(
+                view.getNieuwSpelKnop(), view.getHighscoresKnop(),
+                view.getOptiesKnop(), view.getHelpKnop(), view.getOverOnsKnop());
         this.addWindowEventHandlers();
         this.updateView();
     }

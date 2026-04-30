@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import kdg.model.DifficultyLevel;
+import kdg.model.GeluidManager;
 import kdg.model.HighscoreManager;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
@@ -48,6 +49,7 @@ public class WinschermPresenter {
         this.updateView();
         this.startAnimatie();
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(view.getHighscoresKnop(), view.getMenuKnop());
     }
 
     private void updateView() {

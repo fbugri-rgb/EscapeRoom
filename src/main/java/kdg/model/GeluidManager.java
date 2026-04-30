@@ -1,5 +1,7 @@
 package kdg.model;
 
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
@@ -47,6 +49,14 @@ public class GeluidManager {
                 System.err.println("Geluid kon niet worden geladen: " + naam + " — " + e.getMessage());
             }
         }
+        try {
+            Media media = new Media(getClass().getResource("/audio/button_click.mp3").toExternalForm());
+            spelers.put("klik", new MediaPlayer(media));
+        } catch (NullPointerException e) {
+            // bestand ontbreekt — overslaan
+        } catch (Exception e) {
+            System.err.println("Geluid kon niet worden geladen: button_click — " + e.getMessage());
+        }
     }
 
     public void speel(String naam) {
@@ -75,6 +85,12 @@ public class GeluidManager {
 
     public void stopAlles() {
         spelers.values().forEach(MediaPlayer::stop);
+    }
+
+    public void voegKlikToe(Button... knoppen) {
+        for (Button knop : knoppen) {
+            knop.addEventFilter(ActionEvent.ACTION, e -> speel("klik"));
+        }
     }
 
     public void setVolume(double volume) {

@@ -23,6 +23,7 @@ public class OptieschermPresenter {
         this.stage        = stage;
         this.onOpgeslagen = onOpgeslagen;
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(view.getOpslaanKnop(), view.getAnnulerenKnop());
         this.selecteerHuidigLevel(huidigLevel);
     }
 

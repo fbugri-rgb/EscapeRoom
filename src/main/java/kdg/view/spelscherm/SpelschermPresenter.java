@@ -59,6 +59,9 @@ public class SpelschermPresenter {
         this.stage        = stage;
         this.moeilijkheid = moeilijkheid;
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(
+                view.getOppakkenKnop(), view.getNeerleggenKnop(),
+                view.getGaDoorDeurKnop(), view.getGebruikItemKnop());
         this.addWindowEventHandlers();
         this.updateView();
         this.startTimer();

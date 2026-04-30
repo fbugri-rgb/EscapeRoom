@@ -8,6 +8,7 @@ import javafx.util.Duration;
 import kdg.model.DifficultyLevel;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
+import kdg.model.GeluidManager;
 import kdg.model.HighscoreManager;
 import kdg.model.Timer;
 import kdg.view.introductiescherm.IntroductieschermPresenter;
@@ -38,6 +39,7 @@ public class VerliesschermPresenter {
         this.updateView();
         this.startAnimatie();
         this.addEventHandlers();
+        GeluidManager.getInstance().voegKlikToe(view.getOpnieuwKnop(), view.getMenuKnop());
     }
 
     private void updateView() {
