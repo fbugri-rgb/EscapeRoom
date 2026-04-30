@@ -27,7 +27,7 @@ public class HelpschermView extends BorderPane {
         spelregelsArea.setWrapText(true);
         spelregelsArea.setStyle("""
                 -fx-control-inner-background: #1a1a1a;
-                -fx-text-fill: #00ff41;
+                -fx-text-fill: #FFD700;
                 -fx-border-color: #00ff41;
                 -fx-font-family: monospace;
                 -fx-font-size: 13px;

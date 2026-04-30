@@ -49,7 +49,7 @@ public class IntroductieschermView extends BorderPane {
         verhaalArea.setWrapText(true);
         verhaalArea.setStyle("""
                 -fx-background-color: #1a1a1a;
-                -fx-text-fill: #00ff41;
+                -fx-text-fill: #FFD700;
                 -fx-border-color: #00ff41;
                 -fx-border-width: 1px;
                 -fx-font-family: monospace;

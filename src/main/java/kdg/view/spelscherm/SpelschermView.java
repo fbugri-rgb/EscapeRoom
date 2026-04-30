@@ -65,7 +65,7 @@ public class SpelschermView extends BorderPane {
         kamerBeschrijvingArea.setPrefSize(220, 200);
         kamerBeschrijvingArea.setStyle("""
                 -fx-control-inner-background: #2a2a2a;
-                -fx-text-fill: #00ff41;
+                -fx-text-fill: #FFD700;
                 -fx-border-color: #00ff41;
                 -fx-font-family: monospace;
                 """);
@@ -88,7 +88,7 @@ public class SpelschermView extends BorderPane {
 
         itemBeschrijvingLabel = new Label("Selecteer een item om de beschrijving te zien.");
         itemBeschrijvingLabel.setStyle("""
-                -fx-text-fill: #aaaaaa;
+                -fx-text-fill: #FFD700;
                 -fx-font-family: monospace;
                 -fx-font-size: 12px;
                 -fx-font-style: italic;
