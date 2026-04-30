@@ -14,6 +14,7 @@ public class Game {
     private List<Room> rooms;
     private Room currentRoom;
     private List<Item> verborgenItems;
+    private DifficultyLevel moeilijkheid = DifficultyLevel.NORMAAL;
 
     // Constructor
     public Game(Player player, List<Room> rooms, Room currentRoom, List<Item> verborgenItems) {
@@ -63,7 +64,7 @@ public class Game {
         // check of speler al item heeft
         if(player.hasItem(item)) return false;
         // check inventory capaciteit
-        if(player.getInventory().getItems().size() >= Inventory.MAX_ITEMS) return false;
+        if(player.getInventory().getItems().size() >= player.getInventory().getMaxItems()) return false;
 
         // Item uit room halen en inventory steken van speler
         if(currentRoom.getItems().contains(item)){
@@ -111,6 +112,12 @@ public class Game {
         return opgelost;
     }
 
+    // Moeilijkheid instellen en inventory aanpassen
+    public void setMoeilijkheid(DifficultyLevel level) {
+        this.moeilijkheid = level;
+        this.player.getInventory().setMaxItems(level.getMaxItems());
+    }
+
     // Getters voor attributen klasse
     public Room getCurrentRoom() {
         return currentRoom;
@@ -122,5 +129,9 @@ public class Game {
 
     public List<Room> getRooms() {
         return rooms;
+    }
+
+    public DifficultyLevel getMoeilijkheid() {
+        return moeilijkheid;
     }
 }

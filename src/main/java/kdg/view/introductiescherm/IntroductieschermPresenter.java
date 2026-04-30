@@ -2,6 +2,7 @@ package kdg.view.introductiescherm;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import kdg.model.DifficultyLevel;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
 import kdg.model.HighscoreManager;
@@ -17,17 +18,38 @@ import kdg.view.startscherm.StartschermView;
  */
 public class IntroductieschermPresenter {
 
-    private static final int SPELTIJD_SECONDEN = 600;
-
     private final IntroductieschermView view;
     private final String spelerNaam;
+    private final DifficultyLevel moeilijkheid;
     private final Stage primaryStage;
 
-    public IntroductieschermPresenter(IntroductieschermView view, String spelerNaam, Stage primaryStage) {
-        this.view        = view;
-        this.spelerNaam  = spelerNaam;
+    public IntroductieschermPresenter(IntroductieschermView view, String spelerNaam,
+                                      DifficultyLevel moeilijkheid, Stage primaryStage) {
+        this.view         = view;
+        this.spelerNaam   = spelerNaam;
+        this.moeilijkheid = moeilijkheid;
         this.primaryStage = primaryStage;
         this.addEventHandlers();
+        this.updateView();
+    }
+
+    private void updateView() {
+        int minuten = moeilijkheid.getTijdInSeconden() / 60;
+        String verhaal = String.format("""
+                JAAR 2031. Een mysterieuze explosie heeft \
+                Bunker-17 vergrendeld. Jij bent de enige \
+                overlevende.
+
+                De noodgenerator heeft nog %d minuten stroom.
+                Daarna sluit het ventilatiesysteem af — voor altijd.
+
+                Je moet ontsnappen. Nu.
+
+                Verken de kamers, verzamel items en los de puzzels op \
+                om de uitgang te vinden. Elke seconde telt.
+
+                Veel succes, agent.""", minuten);
+        view.getVerhaalArea().setText(verhaal);
     }
 
     private void addEventHandlers() {
@@ -37,7 +59,8 @@ public class IntroductieschermPresenter {
 
     private void startMissie() {
         Game game           = GameBuilder.buildGame(spelerNaam);
-        Timer timer         = new Timer(SPELTIJD_SECONDEN);
+        game.setMoeilijkheid(moeilijkheid);
+        Timer timer         = new Timer(moeilijkheid.getTijdInSeconden());
         HighscoreManager hs = new HighscoreManager();
 
         SpelschermView spelView = new SpelschermView();
@@ -49,7 +72,7 @@ public class IntroductieschermPresenter {
 
     private void gaNaarStartscherm() {
         StartschermView startView = new StartschermView();
-        new StartschermPresenter(GameBuilder.buildGame(), startView);
+        new StartschermPresenter(startView, moeilijkheid);
         primaryStage.setScene(new Scene(startView, 800, 600));
         primaryStage.setTitle("Bunker-17");
     }

@@ -20,6 +20,7 @@ public class StartschermView extends BorderPane {
     private TextField naamVeld;
     private Button nieuwSpelKnop;
     private Button highscoresKnop;
+    private Button optiesKnop;
     private Button helpKnop;
     private Button overOnsKnop;
 
@@ -42,6 +43,7 @@ public class StartschermView extends BorderPane {
 
         nieuwSpelKnop  = maakKnop("Nieuw Spel");
         highscoresKnop = maakKnop("Highscores");
+        optiesKnop     = maakKnop("Opties");
         helpKnop       = maakKnop("Help");
         overOnsKnop    = maakKnop("Over ons");
     }
@@ -55,7 +57,7 @@ public class StartschermView extends BorderPane {
         this.setTop(titelLabel);
 
         // Naam + knoppen in het midden
-        VBox centrum = new VBox(16, naamLabel, naamVeld, nieuwSpelKnop, highscoresKnop, helpKnop, overOnsKnop);
+        VBox centrum = new VBox(16, naamLabel, naamVeld, nieuwSpelKnop, highscoresKnop, optiesKnop, helpKnop, overOnsKnop);
         centrum.setAlignment(Pos.CENTER);
         centrum.setPadding(new Insets(40));
         this.setCenter(centrum);
@@ -81,6 +83,7 @@ public class StartschermView extends BorderPane {
     TextField getNaamVeld()    { return naamVeld; }
     Button getNieuwSpelKnop()  { return nieuwSpelKnop; }
     Button getHighscoresKnop() { return highscoresKnop; }
+    Button getOptiesKnop()     { return optiesKnop; }
     Button getHelpKnop()       { return helpKnop; }
     Button getOverOnsKnop()    { return overOnsKnop; }
 }

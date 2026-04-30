@@ -18,7 +18,6 @@ import kdg.view.helpscherm.HelpschermPresenter;
 import kdg.view.helpscherm.HelpschermView;
 import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
-import kdg.model.Inventory;
 import kdg.model.Puzzle;
 import kdg.view.puzzelscherm.PuzzelschermPresenter;
 import kdg.view.puzzelscherm.PuzzelschermView;
@@ -69,8 +68,9 @@ public class SpelschermPresenter {
             boolean gelukt = game.pickupItem(item);
             if (gelukt) {
                 toonInfo("Je pakt op: " + item.getName());
-            } else if (game.getPlayer().getInventory().getItems().size() >= Inventory.MAX_ITEMS) {
-                toonMelding("Inventory vol! Je kan maar 1 item dragen. Leg eerst iets neer.");
+            } else if (game.getPlayer().getInventory().getItems().size() >= game.getPlayer().getInventory().getMaxItems()) {
+                int max = game.getPlayer().getInventory().getMaxItems();
+                toonMelding("Inventory vol! Je kan maar " + max + (max == 1 ? " item" : " items") + " dragen. Leg eerst iets neer.");
             } else {
                 toonMelding("Je hebt dit item al.");
             }

@@ -35,16 +35,7 @@ public class IntroductieschermView extends BorderPane {
                 -fx-font-weight: bold;
                 """);
 
-        verhaalArea = new TextArea(
-            "JAAR 2031. Een mysterieuze explosie heeft Bunker-17 vergrendeld. " +
-            "Jij bent de enige overlevende.\n\n" +
-            "De noodgenerator heeft nog 10 minuten stroom.\n" +
-            "Daarna sluit het ventilatiesysteem af — voor altijd.\n\n" +
-            "Je moet ontsnappen. Nu.\n\n" +
-            "Verken de kamers, verzamel items en los de puzzels op\n" +
-            "om de uitgang te vinden. Elke seconde telt.\n\n" +
-            "Veel succes, agent."
-        );
+        verhaalArea = new TextArea();
         verhaalArea.setEditable(false);
         verhaalArea.setWrapText(true);
         verhaalArea.setStyle("""
@@ -94,6 +85,7 @@ public class IntroductieschermView extends BorderPane {
         return knop;
     }
 
-    Button getStartKnop()  { return startKnop; }
-    Button getTerugKnop()  { return terugKnop; }
+    TextArea getVerhaalArea() { return verhaalArea; }
+    Button getStartKnop()     { return startKnop; }
+    Button getTerugKnop()     { return terugKnop; }
 }

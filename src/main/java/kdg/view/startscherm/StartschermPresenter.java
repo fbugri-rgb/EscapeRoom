@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
+import kdg.model.DifficultyLevel;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
 import kdg.model.HighscoreManager;
@@ -16,6 +17,8 @@ import kdg.view.highscorescherm.HighscoreschermPresenter;
 import kdg.view.highscorescherm.HighscoreschermView;
 import kdg.view.introductiescherm.IntroductieschermPresenter;
 import kdg.view.introductiescherm.IntroductieschermView;
+import kdg.view.optiescherm.OptieschermPresenter;
+import kdg.view.optiescherm.OptieschermView;
 
 /**
  * @author Farok
@@ -25,10 +28,20 @@ public class StartschermPresenter {
 
     private final Game model;
     private final StartschermView view;
+    private DifficultyLevel gekozenMoeilijkheid = DifficultyLevel.NORMAAL;
 
     public StartschermPresenter(Game model, StartschermView view) {
+        this(model, view, DifficultyLevel.NORMAAL);
+    }
+
+    public StartschermPresenter(StartschermView view, DifficultyLevel beginMoeilijkheid) {
+        this(null, view, beginMoeilijkheid);
+    }
+
+    private StartschermPresenter(Game model, StartschermView view, DifficultyLevel beginMoeilijkheid) {
         this.model = model;
         this.view = view;
+        this.gekozenMoeilijkheid = beginMoeilijkheid;
         this.addEventHandlers();
         this.addWindowEventHandlers();
         this.updateView();
@@ -47,7 +60,7 @@ public class StartschermPresenter {
 
             Stage stage = (Stage) view.getScene().getWindow();
             IntroductieschermView introView = new IntroductieschermView();
-            new IntroductieschermPresenter(introView, naam, stage);
+            new IntroductieschermPresenter(introView, naam, gekozenMoeilijkheid, stage);
             stage.setScene(new Scene(introView, 800, 500));
             stage.setTitle("Bunker-17 — Introductie");
         });
@@ -57,6 +70,17 @@ public class StartschermPresenter {
             view.getNaamVeld().setStyle(
                     "-fx-background-color: #2a2a2a; -fx-text-fill: #00ff41; " +
                     "-fx-border-color: #00ff41; -fx-font-family: monospace;");
+        });
+
+        view.getOptiesKnop().setOnAction(e -> {
+            OptieschermView optiesView = new OptieschermView();
+            Stage optiesStage = new Stage();
+            optiesStage.setTitle("Opties");
+            optiesStage.setScene(new Scene(optiesView, 450, 350));
+            new OptieschermPresenter(optiesView, optiesStage,
+                    gekozenMoeilijkheid,
+                    level -> gekozenMoeilijkheid = level);
+            optiesStage.show();
         });
 
         view.getHighscoresKnop().setOnAction(e -> {
