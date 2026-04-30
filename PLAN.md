@@ -35,7 +35,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
   - Keuze bewaard bij "← Terug" via startscherm-constructor
   - Timer en inventory passen zich aan op basis van gekozen level
   - Verhaaltekst toont correcte minuten dynamisch
-- Leesteksten geel (#FFD700) in intro-, spel- en helpscherm
+- Leesteksten geel (#FFD700) in intro-, spel-, help- en puzzelscherm (hint-label zekeringkast)
 
 ### Speelpad
 ```
@@ -189,7 +189,7 @@ src/main/resources/
 | `OptieschermView` + `OptieschermPresenter` (moeilijkheid popup) | DONE |
 | Moeilijkheidsgraad bewaard bij terug-navigatie | DONE |
 | Verhaaltekst dynamisch (minuten op basis van level) | DONE |
-| Leesteksten geel (#FFD700) in intro-, spel- en helpscherm | DONE |
+| Leesteksten geel (#FFD700) in intro-, spel-, help- en puzzelscherm | DONE |
 
 ---
 

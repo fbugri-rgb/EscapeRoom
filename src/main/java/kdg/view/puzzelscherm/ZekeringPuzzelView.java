@@ -39,9 +39,9 @@ public class ZekeringPuzzelView extends VBox {
         instructieLabel = new Label("Een code verschijnt op het scherm:");
         instructieLabel.setStyle("-fx-text-fill: #aaaaaa; -fx-font-family: monospace; -fx-font-size: 13px;");
 
-        hintLabel = new Label("Voer de code in (bv. 4-7-9 of 479)");
+        hintLabel = new Label("Voer de code in (bv. 1-2-3 of 123)");
         hintLabel.setStyle("""
-                -fx-text-fill: #00ff41;
+                -fx-text-fill: #FFD700;
                 -fx-font-family: monospace;
                 -fx-font-size: 13px;
                 -fx-font-style: italic;
