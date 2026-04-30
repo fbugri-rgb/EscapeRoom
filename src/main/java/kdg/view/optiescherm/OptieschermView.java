@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -22,6 +23,8 @@ public class OptieschermView extends BorderPane {
     private RadioButton makkelijkRadio;
     private RadioButton normaalRadio;
     private RadioButton moeilijkRadio;
+    private Label volumeLabel;
+    private Slider volumeSlider;
     private Button opslaanKnop;
     private Button annulerenKnop;
 
@@ -48,6 +51,18 @@ public class OptieschermView extends BorderPane {
         moeilijkRadio  = maakRadio("Moeilijk — 5 min, inventory: 1 item");
         normaalRadio.setSelected(true);
 
+        volumeLabel = new Label("Volume:");
+        volumeLabel.setStyle("-fx-text-fill: #00ff41; -fx-font-family: monospace; -fx-font-size: 13px;");
+
+        volumeSlider = new Slider(0.0, 1.0, 0.7);
+        volumeSlider.setShowTickLabels(false);
+        volumeSlider.setShowTickMarks(false);
+        volumeSlider.setPrefWidth(200);
+        volumeSlider.setStyle("""
+                -fx-control-inner-background: #1a1a1a;
+                -fx-accent: #00ff41;
+                """);
+
         opslaanKnop   = maakKnop("Opslaan");
         annulerenKnop = maakKnop("Annuleren");
     }
@@ -64,7 +79,9 @@ public class OptieschermView extends BorderPane {
                 makkelijkRadio,
                 normaalRadio,
                 moeilijkRadio,
-                hint);
+                hint,
+                volumeLabel,
+                volumeSlider);
         midden.setPadding(new Insets(16, 0, 16, 0));
 
         HBox knoppen = new HBox(12, annulerenKnop, opslaanKnop);
@@ -107,6 +124,7 @@ public class OptieschermView extends BorderPane {
     RadioButton getMakkelijkRadio()  { return makkelijkRadio; }
     RadioButton getNormaalRadio()    { return normaalRadio; }
     RadioButton getMoeilijkRadio()   { return moeilijkRadio; }
+    Slider getVolumeSlider()         { return volumeSlider; }
     Button getOpslaanKnop()          { return opslaanKnop; }
     Button getAnnulerenKnop()        { return annulerenKnop; }
 }

@@ -2,6 +2,7 @@ package kdg.view.optiescherm;
 
 import javafx.stage.Stage;
 import kdg.model.DifficultyLevel;
+import kdg.model.GeluidManager;
 
 import java.util.function.Consumer;
 
@@ -34,7 +35,11 @@ public class OptieschermPresenter {
     }
 
     private void addEventHandlers() {
+        view.getVolumeSlider().valueProperty().addListener(
+                (obs, oud, nieuw) -> GeluidManager.getInstance().setVolume(nieuw.doubleValue()));
+
         view.getOpslaanKnop().setOnAction(e -> {
+            GeluidManager.getInstance().setVolume(view.getVolumeSlider().getValue());
             onOpgeslagen.accept(geselecteerdeLevel());
             stage.close();
         });

@@ -5,7 +5,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 
 ---
 
-## Huidige status (2026-04-30) — bijgewerkt fase 9
+## Huidige status (2026-04-30) — bijgewerkt fase 10
 
 ### Wat werkt
 - Volledig speelbaar spel van begin tot einde via onderstaand speelpad
@@ -17,8 +17,11 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 - Items oppakken en gebruiken op deuren
 - Deurnavigatie met knop en dubbelklik; slot-melding bij vergrendelde deuren
 - Item beschrijvingspaneel onderaan (toont `getDescription()` bij selectie)
-- Timer (countdown 10 min) met rood-markering onder 60 seconden
-- Winconditie: score opslaan in `highscores.txt`, highscorescherm openen
+- Timer (countdown, afhankelijk van moeilijkheid) met rood-markering onder 60 seconden
+- **Winscherm**: matrix-regen Canvas animatie, fade-in labels, knop naar Highscores of menu
+- **Verliesscherm**: knipperend rood scherm, shake-animatie, knop om opnieuw te spelen of terug naar menu
+- Highscores opgeslagen met naam, tijd én moeilijkheidsgraad (`naam;seconden;moeilijkheid`)
+- Highscorelijst toont `[Moeilijk]` / `[Normaal]` / `[Makkelijk]` per entry
 - Terugkeer naar startscherm via Spel → Stoppen (bevestigingsdialoog)
 - X-knop: bevestigingsdialoog spelscherm (annuleren houdt open), eenvoudig op startscherm
 - MenuBar groen zichtbaar met hover via `css/stijl.css`
@@ -26,7 +29,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
   - `HelpschermPresenter`: fallback-tekst met basisregels bij ontbrekend/onleesbaar bestand
   - `HighscoreManager`: `scores.clear()` bij leesfouten; `RuntimeException` bij schrijffouten
   - `SpelschermPresenter`: `voegScoreToe()` omwikkeld in try-catch — crash bij schrijffout onmogelijk
-- `highscores.txt` toegevoegd aan `.gitignore`
+- `highscores.txt` toegevoegd aan `.gitignore` en uit git tracking verwijderd
 - `Item implements Interactable`: `interact()` (return true) + `inspect()` (return description)
 - Lege `Game()` constructor verwijderd (alle velden waren null, nergens in gebruik)
 - **Introductiescherm** toegevoegd: verhaaltekst tussen startscherm en spelscherm
@@ -75,7 +78,10 @@ Navigatie:
 - Startscherm → Help/Highscore/About/Opties (apart Stage/popup)
 - Spelscherm → Startscherm via Stoppen-menu (scene-wissel terug)
 - Spelscherm → Puzzelscherm (Terminal / Zekeringkast) als popup Stage
-- Spelscherm → Highscorescherm na winnen
+- Spelscherm → Winscherm (scene-wissel) bij winnen
+- Spelscherm → Verliesscherm (scene-wissel) bij time-out
+- Winscherm → Highscorescherm (popup Stage) of Startscherm
+- Verliesscherm → Introductiescherm (opnieuw spelen) of Startscherm
 
 ---
 
@@ -124,6 +130,12 @@ kdg/
     ├── optiescherm/
     │   ├── OptieschermView.java           ← DONE  RadioButtons per moeilijkheidsgraad
     │   └── OptieschermPresenter.java      ← DONE  Consumer<DifficultyLevel> callback
+    ├── winscherm/
+    │   ├── WinschermView.java             ← DONE  Canvas matrix-regen, fade-in labels, knoppen
+    │   └── WinschermPresenter.java        ← DONE  Timeline animatie, navigatie naar HS/menu
+    ├── verliesscherm/
+    │   ├── VerliesschermView.java         ← DONE  rood knipperend thema, shake-animatie
+    │   └── VerliesschermPresenter.java    ← DONE  Timeline + ScaleTransition + FadeTransition
     └── aboutscherm/
         ├── AboutschermView.java       ← DONE
         └── AboutschermPresenter.java  ← DONE
@@ -190,6 +202,11 @@ src/main/resources/
 | Moeilijkheidsgraad bewaard bij terug-navigatie | DONE |
 | Verhaaltekst dynamisch (minuten op basis van level) | DONE |
 | Leesteksten geel (#FFD700) in intro-, spel-, help- en puzzelscherm | DONE |
+| `WinschermView` + `WinschermPresenter` (matrix Canvas animatie) | DONE |
+| `VerliesschermView` + `VerliesschermPresenter` (rood knipperend) | DONE |
+| `SpelschermPresenter` integreert win/verlies scene-wisselingen | DONE |
+| `HighscoreManager` opslaan met moeilijkheidsgraad | DONE |
+| Highscorelijst toont moeilijkheid per entry | DONE |
 
 ---
 
@@ -230,8 +247,16 @@ src/main/resources/
 16. Moeilijkheidsgraad door hele navigatieketen bewaard
 17. Gele leesteksten (#FFD700) in intro-, spel- en helpscherm
 
-### Fase 10 — Resterende taken (TODO)
-18. JUnit 5 testklassen (Borja)
+### Fase 10 — Win/verlies schermen & highscore afwerking ✅
+18. `WinschermView` + `WinschermPresenter`: Canvas matrix-regen, PauseTransition fade-in labels
+19. `VerliesschermView` + `VerliesschermPresenter`: knipperend rood, ScaleTransition + shake
+20. `SpelschermPresenter`: winconditie en time-out navigeren naar win/verliesscherm (geen Alert meer)
+21. `HighscoreManager`: bestandsformaat uitgebreid met moeilijkheidsgraad; fallback voor oude scores
+22. Highscorelijst toont moeilijkheid per entry; ListView breedte vergroot
+23. `highscores.txt` volledig uit git tracking verwijderd
+
+### Fase 11 — Resterende taken (TODO)
+24. JUnit 5 testklassen (Borja)
 
 ---
 
@@ -273,6 +298,7 @@ src/main/resources/
 | `BorderPane` | Alle schermen | DONE |
 | `VBox` | Startscherm, spelscherm, puzzelschermen | DONE |
 | `HBox` | Spelscherm (bottom + knoppen), puzzelschermen | DONE |
+| `StackPane` | Winscherm (Canvas + overlay labels gestapeld) | DONE |
 
 ### Overige vereisten
 | Criterium | Status |

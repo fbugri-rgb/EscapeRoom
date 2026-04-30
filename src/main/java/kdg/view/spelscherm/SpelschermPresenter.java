@@ -1,6 +1,8 @@
 package kdg.view.spelscherm;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Scene;
@@ -12,6 +14,7 @@ import javafx.util.Duration;
 import kdg.model.DifficultyLevel;
 import kdg.model.Door;
 import kdg.model.Game;
+import kdg.model.GeluidManager;
 import kdg.model.Item;
 import kdg.model.Timer;
 import kdg.model.HighscoreManager;
@@ -59,6 +62,7 @@ public class SpelschermPresenter {
         this.addWindowEventHandlers();
         this.updateView();
         this.startTimer();
+        GeluidManager.getInstance().speelLoop("achtergrond");
     }
 
     private void addEventHandlers() {
@@ -75,6 +79,7 @@ public class SpelschermPresenter {
             Item item = items.get(index);
             boolean gelukt = game.pickupItem(item);
             if (gelukt) {
+                GeluidManager.getInstance().speel("pickup");
                 toonInfo("Je pakt op: " + item.getName());
             } else if (game.getPlayer().getInventory().getItems().size() >= game.getPlayer().getInventory().getMaxItems()) {
                 int max = game.getPlayer().getInventory().getMaxItems();
@@ -99,6 +104,7 @@ public class SpelschermPresenter {
             Item item = inventory.get(index);
             game.getPlayer().dropItem(item);
             game.getCurrentRoom().addItem(item);
+            GeluidManager.getInstance().speel("neerleggen");
             updateView();
         });
 
@@ -136,6 +142,13 @@ public class SpelschermPresenter {
 
             boolean gelukt = game.useItemOnDoor(item, deur);
             if (gelukt) {
+                GeluidManager geluid = GeluidManager.getInstance();
+                String doelKamer = deur.getTargetRoom(game.getCurrentRoom()).getName();
+                if (doelKamer.equals(EINDKAMER_NAAM)) {
+                    geluid.speel("sleutel");
+                } else {
+                    geluid.speel("deur_open");
+                }
                 toonInfo("Deur geopend met: " + item.getName());
             } else {
                 toonMelding("Dit item opent deze deur niet.");
@@ -173,6 +186,7 @@ public class SpelschermPresenter {
             if (toonBevestigingsdialoog()) {
                 timerTimeline.stop();
                 timer.pauze();
+                GeluidManager.getInstance().stopAlles();
                 StartschermView startView = new StartschermView();
                 new StartschermPresenter(startView, moeilijkheid);
                 stage.setScene(new Scene(startView, 800, 600));
@@ -202,10 +216,18 @@ public class SpelschermPresenter {
 
         Door deur = deuren.get(index);
         if (deur.isLocked()) {
+            GeluidManager geluid = GeluidManager.getInstance();
+            geluid.speel("deur_bang");
+            PauseTransition pause1 = new PauseTransition(Duration.millis(300));
+            pause1.setOnFinished(ev -> geluid.speel("deur_bang"));
+            PauseTransition pause2 = new PauseTransition(Duration.millis(300));
+            pause2.setOnFinished(ev -> geluid.speel("deur_bang"));
+            new SequentialTransition(pause1, pause2).play();
             toonMelding("Deze deur is op slot. Gebruik het juiste item.");
             return;
         }
         game.moveThroughDoor(deur);
+        GeluidManager.getInstance().speel("deur_open");
         updateView();
         controleerWinConditie();
         controleerPuzzel();
@@ -259,6 +281,9 @@ public class SpelschermPresenter {
             System.err.println("Score opslaan mislukt: " + e.getMessage());
         }
 
+        GeluidManager.getInstance().stop("achtergrond");
+        GeluidManager.getInstance().speel("win");
+
         WinschermView winView = new WinschermView();
         new WinschermPresenter(winView, stage, game.getPlayer().getName(),
                 verstreken, hsManager, moeilijkheid);
@@ -269,6 +294,9 @@ public class SpelschermPresenter {
     private void controleerVerlies() {
         timerTimeline.stop();
         game.lose();
+
+        GeluidManager.getInstance().stop("achtergrond");
+        GeluidManager.getInstance().speel("verlies");
 
         VerliesschermView verliesView = new VerliesschermView();
         new VerliesschermPresenter(verliesView, stage,

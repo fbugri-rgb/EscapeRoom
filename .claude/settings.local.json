@@ -14,7 +14,19 @@
       "PowerShell(Get-Command *)",
       "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" clean compile -q 2>&1 | Select-Object -Last 10)",
       "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" clean compile -q 2>&1 | Select-Object -Last 15)",
-      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" clean compile -q 2>&1 | Select-Object -Last 5)"
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" clean compile -q 2>&1 | Select-Object -Last 5)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" exec:java -Dexec.mainClass=\"kdg.AnimatieDemo\" 2>&1 | Select-Object -Last 10)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"exec:java\" \"-Dexec.mainClass=kdg.AnimatieDemo\" 2>&1 | Select-Object -Last 15)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"exec:java\" \"-Dexec.mainClass=kdg.AnimatieDemo\" 2>&1 | Select-Object -Last 5)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; Set-Location \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"exec:java\" \"-Dexec.mainClass=kdg.AnimatieDemo\" 2>&1 | Select-Object -Last 3)",
+      "Bash(.\\\\mvnw.cmd clean *)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; cd \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"clean\" \"compile\" 2>&1 | Select-Object -Last 25)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; cd \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"clean\" \"compile\" 2>&1 | Select-Object -Last 20)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; cd \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"compile\" 2>&1 | Select-Object -Last 10)",
+      "Bash(git rm *)",
+      "Bash(git restore *)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; cd \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"compile\" 2>&1 | Select-Object -Last 12)",
+      "PowerShell($env:JAVA_HOME = \"C:\\\\Program Files\\\\Java\\\\jdk-21\"; cd \"C:\\\\Users\\\\verko\\\\Desktop\\\\KDG\\\\DS2\\\\EscapeRoom\"; & \".\\\\mvnw.cmd\" \"compile\" 2>&1 | Select-Object -Last 8)"
     ]
   }
 }

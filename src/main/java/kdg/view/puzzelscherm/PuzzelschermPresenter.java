@@ -5,6 +5,7 @@ import javafx.animation.Timeline;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import kdg.model.Game;
+import kdg.model.GeluidManager;
 
 /**
  * @author Farok
@@ -38,6 +39,7 @@ public class PuzzelschermPresenter {
         boolean gelukt = game.losTerminalPuzzelOp(PUZZEL_ID, poging);
 
         if (gelukt) {
+            GeluidManager.getInstance().speel("puzzel_correct");
             view.getFeedbackLabel().setStyle(
                     "-fx-text-fill: #00ff41; -fx-font-family: monospace; -fx-font-size: 12px;");
             view.getFeedbackLabel().setText("Toegang verleend!");
@@ -49,6 +51,7 @@ public class PuzzelschermPresenter {
                 onOpgelost.run();
             })).play();
         } else {
+            GeluidManager.getInstance().speel("puzzel_fout");
             view.getFeedbackLabel().setStyle(
                     "-fx-text-fill: #ff4444; -fx-font-family: monospace; -fx-font-size: 12px;");
             view.getFeedbackLabel().setText("Ongeldig wachtwoord. Probeer opnieuw.");

@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import kdg.model.Game;
 import kdg.model.GameBuilder;
+import kdg.model.GeluidManager;
 import kdg.view.startscherm.StartschermPresenter;
 import kdg.view.startscherm.StartschermView;
 
@@ -17,6 +18,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Game game = GameBuilder.buildGame();
+
+        GeluidManager.getInstance().laadGeluiden();
 
         StartschermView view = new StartschermView();
         new StartschermPresenter(game, view);
