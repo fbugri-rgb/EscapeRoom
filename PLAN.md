@@ -5,7 +5,7 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
 
 ---
 
-## Huidige status (2026-04-30) — bijgewerkt fase 10
+## Huidige status (2026-05-01) — bijgewerkt fase 12
 
 ### Wat werkt
 - Volledig speelbaar spel van begin tot einde via onderstaand speelpad
@@ -39,6 +39,8 @@ Studenten: **Borja Cools** (model) · **Farok Bugri** (view/GUI)
   - Timer en inventory passen zich aan op basis van gekozen level
   - Verhaaltekst toont correcte minuten dynamisch
 - Leesteksten geel (#FFD700) in intro-, spel-, help- en puzzelscherm (hint-label zekeringkast)
+- **Geluidseffecten** via `GeluidManager` (singleton): achtergrond loop, pickup, neerleggen, deur_open, deur_bang, sleutel, zekering, puzzel_correct, puzzel_fout, win, verlies
+- **Klikgeluid** op alle knoppen in het project via `voegKlikToe()` met `addEventFilter` (overschrijft geen bestaande handlers)
 
 ### Speelpad
 ```
@@ -104,7 +106,8 @@ kdg/
 │   ├── Interactable.java              ← DONE  interface geïmplementeerd door Item
 │   ├── DifficultyLevel.java           ← DONE  enum MAKKELIJK/NORMAAL/MOEILIJK
 │   ├── Timer.java                     ← DONE  countdown-timer
-│   └── HighscoreManager.java          ← DONE  lees/schrijf highscores.txt
+│   ├── HighscoreManager.java          ← DONE  lees/schrijf highscores.txt
+│   └── GeluidManager.java             ← DONE  singleton, laadGeluiden(), speel(), speelLoop(), voegKlikToe()
 │
 └── view/
     ├── startscherm/
@@ -146,8 +149,21 @@ kdg/
 src/main/resources/
 ├── spelregels.txt      ← DONE  gelezen door HelpschermPresenter
 ├── highscores.txt      ← runtime  gelezen én geschreven door HighscoreManager
-└── css/
-    └── stijl.css       ← DONE  MenuBar en context-menu stijl
+├── css/
+│   └── stijl.css       ← DONE  MenuBar en context-menu stijl
+└── audio/
+    ├── achtergrond.mp3  ← DONE  achtergrondmuziek (loop)
+    ├── pickup.mp3       ← DONE  item oppakken
+    ├── neerleggen.mp3   ← DONE  item neerleggen
+    ├── deur_open.mp3    ← DONE  deur openen
+    ├── deur_bang.mp3    ← DONE  deur op slot (3x)
+    ├── sleutel.mp3      ← DONE  eindsleutel gebruikt
+    ├── zekering.mp3     ← DONE  zekeringkast puzzel opgelost
+    ├── puzzel_correct.mp3 ← DONE
+    ├── puzzel_fout.mp3  ← DONE
+    ├── win.mp3          ← DONE
+    ├── verlies.mp3      ← DONE
+    └── button_click.mp3 ← DONE  klikgeluid op alle knoppen
 ```
 
 ---
@@ -207,6 +223,11 @@ src/main/resources/
 | `SpelschermPresenter` integreert win/verlies scene-wisselingen | DONE |
 | `HighscoreManager` opslaan met moeilijkheidsgraad | DONE |
 | Highscorelijst toont moeilijkheid per entry | DONE |
+| `GeluidManager.java` — singleton geluidsysteem | DONE |
+| Audio-bestanden (11x) + achtergrondmuziek loop | DONE |
+| Contextgebonden geluiden in alle presenters | DONE |
+| Volume-slider in optiescherm gekoppeld aan `GeluidManager` | DONE |
+| `voegKlikToe()` + `button_click.mp3` — klikgeluid op alle knoppen | DONE |
 
 ---
 
@@ -255,8 +276,20 @@ src/main/resources/
 22. Highscorelijst toont moeilijkheid per entry; ListView breedte vergroot
 23. `highscores.txt` volledig uit git tracking verwijderd
 
-### Fase 11 — Resterende taken (TODO)
-24. JUnit 5 testklassen (Borja)
+### Fase 11 — Geluidseffecten ✅
+24. `GeluidManager.java` — singleton met `laadGeluiden()`, `speel()`, `speelLoop()`, `stop()`, `stopAlles()`, `setVolume()`
+25. 11 audio-bestanden toegevoegd in `src/main/resources/audio/`
+26. Achtergrondmuziek (loop) gestart bij spelscherm
+27. Contextgebonden geluiden: pickup, neerleggen, deur_open, deur_bang (3x), sleutel, zekering, puzzel_correct, puzzel_fout, win, verlies
+28. Volume-slider in optiescherm gekoppeld aan `GeluidManager.setVolume()`
+
+### Fase 12 — Klikgeluid op alle knoppen ✅
+29. `button_click.mp3` geladen met sleutel `"klik"` in `GeluidManager`
+30. `voegKlikToe(Button... knoppen)` — gebruikt `addEventFilter` zodat bestaande handlers niet worden overschreven
+31. Klikgeluid toegevoegd in alle 8 presenters (start, introductie, spel, puzzel, zekering, win, verlies, opties)
+
+### Fase 13 — Resterende taken (TODO)
+32. JUnit 5 testklassen (Borja)
 
 ---
 
