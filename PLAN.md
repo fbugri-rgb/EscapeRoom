@@ -224,7 +224,7 @@ src/main/resources/
 | `HighscoreManager` opslaan met moeilijkheidsgraad | DONE |
 | Highscorelijst toont moeilijkheid per entry | DONE |
 | `GeluidManager.java` — singleton geluidsysteem | DONE |
-| Audio-bestanden (11x) + achtergrondmuziek loop | DONE |
+| Audio-bestanden (12x) + achtergrondmuziek loop | DONE |
 | Contextgebonden geluiden in alle presenters | DONE |
 | Volume-slider in optiescherm gekoppeld aan `GeluidManager` | DONE |
 | `voegKlikToe()` + `button_click.mp3` — klikgeluid op alle knoppen | DONE |
@@ -278,7 +278,7 @@ src/main/resources/
 
 ### Fase 11 — Geluidseffecten ✅
 24. `GeluidManager.java` — singleton met `laadGeluiden()`, `speel()`, `speelLoop()`, `stop()`, `stopAlles()`, `setVolume()`
-25. 11 audio-bestanden toegevoegd in `src/main/resources/audio/`
+25. 12 audio-bestanden toegevoegd in `src/main/resources/audio/`
 26. Achtergrondmuziek (loop) gestart bij spelscherm
 27. Contextgebonden geluiden: pickup, neerleggen, deur_open, deur_bang (3x), sleutel, zekering, puzzel_correct, puzzel_fout, win, verlies
 28. Volume-slider in optiescherm gekoppeld aan `GeluidManager.setVolume()`
@@ -314,7 +314,8 @@ src/main/resources/
 | `ListView` | Spelscherm (deuren, items, inventory), highscorescherm | DONE |
 | `MenuBar` / `MenuItem` | Spelscherm | DONE |
 | `RadioButton` / `ToggleGroup` | Optiescherm (moeilijkheidsgraad) | DONE |
-| `PasswordField` → vervangen door `TextField` | Puzzelscherm | DONE |
+| `Slider` | Optiescherm (volume) | DONE |
+| `Canvas` | Winscherm (matrix-regen animatie) | DONE |
 
 ### Events (min. 3 verschillende)
 | Event | Waar | Status |
