@@ -57,6 +57,67 @@ Het spel telt **6 kamers** die je in volgorde doorloopt. Elke kamer heeft zijn e
 
 ---
 
+## 📦 Maven installeren (optioneel)
+
+Het project bevat een ingebouwde Maven wrapper (`mvnw` / `mvnw.cmd`), dus Maven hoeft **niet** apart geïnstalleerd te worden. Wil je Maven toch globaal installeren, gebruik dan onderstaande commando's.
+
+### Windows
+
+Via [Winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) (Windows 10/11):
+```bash
+winget install Apache.Maven
+```
+
+Of via [Chocolatey](https://chocolatey.org/):
+```bash
+choco install maven
+```
+
+Controleer de installatie:
+```bash
+mvn -version
+```
+
+### macOS
+
+Via [Homebrew](https://brew.sh/):
+```bash
+brew install maven
+```
+
+Controleer de installatie:
+```bash
+mvn -version
+```
+
+### Linux (Ubuntu / Debian)
+
+```bash
+sudo apt update
+sudo apt install maven -y
+```
+
+Controleer de installatie:
+```bash
+mvn -version
+```
+
+### Linux (Fedora / RHEL)
+
+```bash
+sudo dnf install maven -y
+```
+
+### Linux (Arch Linux)
+
+```bash
+sudo pacman -S maven
+```
+
+> 💡 **Niet zeker welke methode?** Gebruik gewoon `mvnw.cmd` (Windows) of `./mvnw` (Mac/Linux) — dan heb je Maven helemaal niet nodig.
+
+---
+
 ## 🚀 Installatie & Opstarten
 
 ### Stap 1: Repository clonen
